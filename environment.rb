@@ -1,9 +1,10 @@
-require 'rubygems'
-require 'bundler/setup'
-Bundler.require
-require 'yaml'
-
 module Uphold
+  require 'rubygems'
+  require 'rubygems/package'
+  require 'bundler/setup'
+  Bundler.require
+  require 'yaml'
+
   ENV['RACK_ENV'] ||= 'development'
 
   ROOT = File.dirname(File.expand_path(__FILE__))
