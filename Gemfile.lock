@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colored (1.2)
+    diff-lcs (1.2.5)
+    git-up (0.5.12)
+      colored (>= 1.2)
+      grit
+    grit (2.5.0)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+      posix-spawn (~> 0.3.6)
+    mime-types (1.25.1)
+    posix-spawn (0.3.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  git-up
+
+BUNDLED WITH
+   1.11.2
