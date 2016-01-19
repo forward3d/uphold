@@ -10,17 +10,13 @@ module Uphold
       'zip'  => 'zip'
     }
 
-    def decompress(file)
+    def decompress(file, &blk)
       if compressed?(file)
         extract(file).each do |decompressed_file|
-          if compressed?(decompressed_file)
-            decompress(decompressed_file)
-          else
-            yield(decompressed_file)
-          end
+          compressed?(decompressed_file) ? decompress(decompressed_file, &blk) : blk.call(decompressed_file)
         end
       else
-        yield file
+        blk.call(file)
       end
     end
 
@@ -89,9 +85,8 @@ module Uphold
     end
 
     def save_tar_entry(entry, dir)
-      path = File.join(dir, entry.full_name)
-      FileUtils.mkdir_p(File.dirname(path))
-      path.tap do |filename|
+      File.join(dir, entry.full_name).tap do |filename|
+        FileUtils.mkdir_p(File.dirname(filename))
         open(filename, 'w') do |output_file|
           output_file.write entry.read(BUFFER_SIZE) until entry.eof?
         end
