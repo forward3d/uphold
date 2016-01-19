@@ -12,7 +12,6 @@ module Uphold
     def start
       transport_params = @config[:transport][:settings]
       transport_params.merge!(dir: Dir.mktmpdir)
-
       transport = @transport.new(transport_params)
 
       engine_params = @config[:engine]
