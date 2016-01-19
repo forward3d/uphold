@@ -12,12 +12,14 @@ GEM
       posix-spawn (~> 0.3.6)
     mime-types (1.25.1)
     posix-spawn (0.3.11)
+    rubyzip (1.1.7)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   git-up
+  rubyzip (~> 1.1, >= 1.1.7)
 
 BUNDLED WITH
    1.11.2
