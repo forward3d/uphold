@@ -1,5 +1,7 @@
 module Uphold
   class Config
+    include Logging
+    
     def self.all
       Dir[File.join(ROOT, 'config', '*.yml')].sort.map do |config|
         yaml = YAML.load_file(config)
