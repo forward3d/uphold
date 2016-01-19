@@ -4,7 +4,7 @@ module Uphold
       Dir[File.join(ROOT, 'config', '*.yml')].sort.map do |config|
         yaml = YAML.load_file(config)
         next unless valid?(yaml)
-        yaml
+        supplement(yaml)
       end.compact
     end
 
@@ -14,6 +14,12 @@ module Uphold
       valid = false unless engines.any? { |e| e[:name] == yaml['engine']['type'] }
       valid = false unless transports.any? { |e| e[:name] == yaml['transport']['type'] }
       valid
+    end
+
+    def self.supplement(yaml)
+      yaml['engine']['klass'] = engines.find { |e| e[:name] == yaml['engine']['type'] }[:klass]
+      yaml['transport']['klass'] = transports.find { |e| e[:name] == yaml['transport']['type'] }[:klass]
+      yaml
     end
 
     def self.load_engines
@@ -32,7 +38,6 @@ module Uphold
       list = engines
       list << engine
       list.uniq! { |e| e[:name] }
-      engines = list
     end
 
     def self.load_transports
@@ -47,7 +52,6 @@ module Uphold
       list = transports
       list << transport
       list.uniq! { |e| e[:name] }
-      transports = list
     end
 
     def self.transports
