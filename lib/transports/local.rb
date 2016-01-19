@@ -11,14 +11,8 @@ module Uphold
         if File.file?(@path)
           tmp_path = File.join(@dir, File.basename(@path))
           FileUtils.cp(@path, tmp_path)
-          @path = tmp_path
-          logger.error @path
-
-          decompress(@path) do |decompressed_file|
-            logger.info decompressed_file
+          decompress(tmp_path) do |_b|
           end
-
-          logger.info 'done decompress'
           File.join(@dir, @folder)
         else
           logger.error "No file exists at '#{@path}'"
