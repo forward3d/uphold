@@ -10,14 +10,32 @@ module Uphold
       'zip'  => 'zip'
     }
 
-    def decompress(file, opts = {})
+    def decompress(file)
+      if compressed?(file)
+        extract(file).each do |decompressed_file|
+          if compressed?(decompressed_file)
+            decompress(decompressed_file)
+          else
+            yield(decompressed_file)
+          end
+        end
+      else
+        yield file
+      end
+    end
+
+    def compressed?(file)
+      identify(file)
+    end
+
+    private
+
+    def extract(file, opts = {})
       type = opts.delete(:type) || opts.delete('type') || identify(file)
       fail("Could not decompress #{File.basename(file)}. Please add a handler to handle files of type: #{type}.") unless respond_to?("#{type}_decompress", true)
       files = send("#{type}_decompress", file, opts)
       [files].flatten
     end
-
-    private
 
     def identify(file)
       type = File.extname(file)[1..-1]
@@ -71,7 +89,9 @@ module Uphold
     end
 
     def save_tar_entry(entry, dir)
-      File.join(dir, entry.full_name).tap do |filename|
+      path = File.join(dir, entry.full_name)
+      FileUtils.mkdir_p(File.dirname(path))
+      path.tap do |filename|
         open(filename, 'w') do |output_file|
           output_file.write entry.read(BUFFER_SIZE) until entry.eof?
         end
