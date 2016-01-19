@@ -1,8 +1,12 @@
 module Uphold
   module Transports
     class Local < Transport
-      def fetch(path:)
-        path
+      def initialize(path:)
+        @path = path
+      end
+
+      def fetch
+        @path
       end
     end
   end
