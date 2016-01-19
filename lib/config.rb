@@ -3,6 +3,7 @@ module Uphold
     def self.all
       Dir[File.join(ROOT, 'config', '*.yml')].sort.map do |config|
         yaml = YAML.load_file(config)
+        yaml = deep_convert(yaml)
         next unless valid?(yaml)
         supplement(yaml)
       end.compact
@@ -10,15 +11,15 @@ module Uphold
 
     def self.valid?(yaml)
       valid = true
-      valid = false if yaml['enabled'] != true
-      valid = false unless engines.any? { |e| e[:name] == yaml['engine']['type'] }
-      valid = false unless transports.any? { |e| e[:name] == yaml['transport']['type'] }
+      valid = false if yaml[:enabled] != true
+      valid = false unless engines.any? { |e| e[:name] == yaml[:engine][:type] }
+      valid = false unless transports.any? { |e| e[:name] == yaml[:transport][:type] }
       valid
     end
 
     def self.supplement(yaml)
-      yaml['engine']['klass'] = engines.find { |e| e[:name] == yaml['engine']['type'] }[:klass]
-      yaml['transport']['klass'] = transports.find { |e| e[:name] == yaml['transport']['type'] }[:klass]
+      yaml[:engine][:klass] = engines.find { |e| e[:name] == yaml[:engine][:type] }[:klass]
+      yaml[:transport][:klass] = transports.find { |e| e[:name] == yaml[:transport][:type] }[:klass]
       yaml
     end
 
@@ -56,6 +57,14 @@ module Uphold
 
     def self.transports
       @transports ||= []
+    end
+
+    private
+
+    def self.deep_convert(element)
+      return element.collect { |e| deep_convert(e) } if element.is_a?(Array)
+      return element.inject({}) { |sh,(k,v)| sh[k.to_sym] = deep_convert(v); sh } if element.is_a?(Hash)
+      element
     end
   end
 end
