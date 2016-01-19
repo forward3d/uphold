@@ -1,6 +1,6 @@
 module Uphold
   module Engines
-    class Mongodb < Engine
+    class Mysql < Engine
       def recover(path:)
         path
       end
