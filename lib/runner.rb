@@ -20,7 +20,7 @@ module Uphold
       engine_params.merge!(path: transport.fetch)
 
       engine = @engine.new(engine_params)
-      engine.recover
+      engine.load
     end
 
   end

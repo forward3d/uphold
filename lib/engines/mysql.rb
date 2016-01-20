@@ -6,7 +6,7 @@ module Uphold
         @path = path
       end
 
-      def recover
+      def load
         # do stuff
       end
     end
