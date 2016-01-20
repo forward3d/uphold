@@ -1,5 +1,5 @@
 module Uphold
-  module Helpers
+  module Compression
     module_function
 
     BUFFER_SIZE = 4_194_304

@@ -1,7 +1,7 @@
 module Uphold
   class Transport
     include Logging
-    include Helpers
+    include Compression
 
     def fetch
       fail "Your transport must implement the 'fetch' method"
