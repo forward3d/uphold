@@ -14,7 +14,7 @@ module Uphold
   Dir["#{ROOT}/lib/*.rb"].sort.each { |file| require file }
 
   include Logging
-  logger.level = Logger::INFO
+  logger.level = Logger::DEBUG
   logger.info 'Starting Uphold'
 
   Config.load_engines
