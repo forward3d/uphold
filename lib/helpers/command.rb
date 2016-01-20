@@ -12,9 +12,9 @@ module Uphold
             until (line = stream.gets).nil? do
               # yield the block depending on the stream
               if key == :out
-                logger.debug "[#{log_command}] [stdout] #{line.chomp}" unless line.nil?
+                logger.debug(log_command) { line.chomp } unless line.nil?
               else
-                logger.error "[#{log_command}] [stderr] #{line.chomp}" unless line.nil?
+                logger.error(log_command) { line.chomp } unless line.nil?
               end
             end
           end

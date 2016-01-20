@@ -4,6 +4,7 @@ module Uphold
   require 'bundler/setup'
   Bundler.require
   require 'yaml'
+  require 'open3' 
 
   ENV['RACK_ENV'] ||= 'development'
 
