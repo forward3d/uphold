@@ -9,12 +9,12 @@ module Uphold
       def fetch_backup
         file_path = File.join(@path, @filename)
         if File.file?(file_path)
-          tmp_path = File.join(@dir, File.basename(file_path))
+          tmp_path = File.join(@tmpdir, File.basename(file_path))
           logger.debug "Copying '#{file_path}' to '#{tmp_path}'"
           FileUtils.cp(file_path, tmp_path)
           decompress(tmp_path) do |_b|
           end
-          File.join(@dir, @folder_within)
+          File.join(@tmpdir, @folder_within)
         else
           logger.fatal "No file exists at '#{file_path}'"
         end

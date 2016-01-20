@@ -14,12 +14,12 @@ module Uphold
         matching_prefix = s3.list_objects(bucket: @bucket, max_keys: 10, prefix: @path).contents.collect(&:key)
         matching_file = matching_prefix.find { |s3_file| File.fnmatch(@filename, File.basename(s3_file)) }
 
-        File.open(File.join(@dir, File.basename(matching_file)), 'wb') do |file|
+        File.open(File.join(@tmpdir, File.basename(matching_file)), 'wb') do |file|
           s3.get_object({ bucket: @bucket, key: matching_file }, target: file)
           decompress(file) do |_b|
           end
         end
-        File.join(@dir, @folder_within)
+        File.join(@tmpdir, @folder_within)
       end
     end
   end

@@ -4,7 +4,7 @@ module Uphold
     include Compression
 
     def initialize(params)
-      @dir = params[:dir]
+      @tmpdir = Dir.mktmpdir
       @path = params[:path]
       @filename = params[:filename]
       @folder_within = params[:folder_within]
@@ -17,6 +17,7 @@ module Uphold
 
     def fetch
       logger.info "Transport starting #{self.class.to_s}"
+      logger.debug "Temporary directory '#{@tmpdir}'"
       path = fetch_backup
       if path.nil?
         logger.fatal 'Transport failed!'
