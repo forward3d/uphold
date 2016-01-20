@@ -7,14 +7,15 @@ module Uphold
       end
 
       def load
-        logger.info "Starting MongoDB load for '#{@database}'"
         Dir.chdir(@path) do
           logger.debug "chdir to '#{@path}'"
           process = run_command("mongorestore --verbose --drop --db uphold #{@database}")
           if process.success?
             logger.info 'Database loaded successfully'
+            true
           else
             logger.error 'Database did not load successfully'
+            false
           end
         end
       end
