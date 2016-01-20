@@ -3,6 +3,16 @@ module Uphold
     include Logging
     include Compression
 
+    def initialize(params)
+      @dir = params[:dir]
+      @folder_within = params[:folder_within]
+
+      @date_format = params[:date_format]
+      @date_offset = params[:date_offset]
+      @path.gsub!('{date}', (Date.today - @date_offset).strftime(@date_format))
+      @filename.gsub!('{date}', (Date.today - @date_offset).strftime(@date_format))
+    end
+
     def fetch
       logger.info "Transport starting #{self.class.to_s}"
       path = fetch_backup
