@@ -1,12 +1,13 @@
 module Uphold
   class Config
     include Logging
-    
+
     def self.all
       Dir[File.join(ROOT, 'config', '*.yml')].sort.map do |config|
         yaml = YAML.load_file(config)
         yaml = deep_convert(yaml)
         next unless valid?(yaml)
+        logger.info "Loaded config '#{yaml[:name]}' from '#{config}'"
         supplement(yaml)
       end.compact
     end
@@ -40,6 +41,7 @@ module Uphold
     def self.add_engine(engine)
       list = engines
       list << engine
+      logger.debug "Loaded engine #{engine[:klass]}"
       list.uniq! { |e| e[:name] }
     end
 
@@ -54,6 +56,7 @@ module Uphold
     def self.add_transport(transport)
       list = transports
       list << transport
+      logger.debug "Loaded transport #{transport[:klass]}"
       list.uniq! { |e| e[:name] }
     end
 

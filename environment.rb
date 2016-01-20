@@ -12,6 +12,10 @@ module Uphold
   Dir["#{ROOT}/lib/helpers/*.rb"].sort.each { |file| require file }
   Dir["#{ROOT}/lib/*.rb"].sort.each { |file| require file }
 
+  include Logging
+
+  logger.info 'Starting Uphold'
+
   Config.load_engines
   Config.load_transports
 
