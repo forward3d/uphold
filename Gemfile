@@ -4,6 +4,9 @@ source 'https://rubygems.org'
 gem 'rubyzip',  '~> 1.1', '>= 1.1.7'
 gem 'minitest', '~> 5.8', '>= 5.8.3'
 
+# transports
+gem 'aws-sdk', '~> 2.2', '>= 2.2.12'
+
 # databases
 gem 'sequel',  '~> 4.30'
 gem 'pg',      '~> 0.18.4'
