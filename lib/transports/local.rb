@@ -3,7 +3,6 @@ module Uphold
     class Local < Transport
       def initialize(params)
         super(params)
-        @folder_within = params[:folder_within]
       end
 
       def fetch_backup
