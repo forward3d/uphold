@@ -2,23 +2,21 @@ module Uphold
   module Transports
     class Local < Transport
       def initialize(params)
-        @dir = params[:dir]
-        @path = params[:path]
-        @folder = params[:folder]
+        super(params)
+        @folder_within = params[:folder_within]
       end
 
       def fetch_backup
-        if File.file?(@path)
-          tmp_path = File.join(@dir, File.basename(@path))
-          logger.debug "Copying '#{@path}' to '#{tmp_path}'"
-          FileUtils.cp(@path, tmp_path)
-          logger.debug "Decompressing '#{File.basename(tmp_path)}'"
+        file_path = File.join(@path, @filename)
+        if File.file?(file_path)
+          tmp_path = File.join(@dir, File.basename(file_path))
+          logger.debug "Copying '#{file_path}' to '#{tmp_path}'"
+          FileUtils.cp(file_path, tmp_path)
           decompress(tmp_path) do |_b|
           end
-          logger.debug 'Done with transport'
-          File.join(@dir, @folder)
+          File.join(@dir, @folder_within)
         else
-          logger.fatal "No file exists at '#{@path}'"
+          logger.fatal "No file exists at '#{file_path}'"
         end
       end
 

@@ -7,8 +7,6 @@ module Uphold
         @access_key_id = params[:access_key_id]
         @secret_access_key = params[:secret_access_key]
         @bucket = params[:bucket]
-        @path = params[:path]
-        @filename = params[:filename]
       end
 
       def fetch_backup
