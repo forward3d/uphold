@@ -2,7 +2,7 @@ module Uphold
   module Command
     module_function
 
-    def run(cmd)
+    def run_command(cmd)
       logger.debug "Running command '#{cmd}'"
       log_command = "#{cmd.split(' ')[0]}"
       Open3.popen3(cmd) do |_stdin, stdout, stderr, thread|
@@ -24,6 +24,5 @@ module Uphold
         return thread.value
       end
     end
-
   end
 end
