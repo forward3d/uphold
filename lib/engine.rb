@@ -4,7 +4,7 @@ module Uphold
     include Command
 
     def load
-      logger.info "Engine starting #{self.class.to_s}"
+      logger.info "Engine starting #{self.class}"
       process = load_backup
       if process.success?
         logger.info 'Engine finished successfully'

@@ -18,7 +18,7 @@ module Uphold
     end
 
     def fetch
-      logger.info "Transport starting #{self.class.to_s}"
+      logger.info "Transport starting #{self.class}"
       logger.debug "Temporary directory '#{@tmpdir}'"
       path = fetch_backup
       if path.nil?
