@@ -8,7 +8,6 @@ module Uphold
 
       def load_backup
         Dir.chdir(@path) do
-          logger.debug "chdir to '#{@path}'"
           run_command("mongorestore --verbose --drop --db uphold #{@database}")
         end
       end
