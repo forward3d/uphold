@@ -4,6 +4,7 @@ module Uphold
     include Compression
 
     def fetch
+      logger.info "Transport starting #{self.class.to_s}"
       path = fetch_backup
       if path.nil?
         logger.fatal 'Transport failed!'

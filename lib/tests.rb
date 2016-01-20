@@ -8,6 +8,7 @@ module Uphold
     end
 
     def run
+      logger.info 'Tests starting'
       @tests.each do |t|
         process = run_command("ruby tests/#{t}")
         if process.success?
