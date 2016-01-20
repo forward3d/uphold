@@ -3,8 +3,10 @@ module Uphold
     include Logging
     include Compression
 
+    attr_reader :tmpdir
+
     def initialize(params)
-      @tmpdir = Dir.mktmpdir
+      @tmpdir = Dir.mktmpdir('uphold')
       @path = params[:path]
       @filename = params[:filename]
       @folder_within = params[:folder_within]
