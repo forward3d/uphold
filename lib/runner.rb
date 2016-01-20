@@ -11,6 +11,7 @@ module Uphold
     end
 
     def start
+      t1 = Time.now
       transport_params = @config[:transport][:settings]
       transport = @transport.new(transport_params)
       begin
@@ -37,7 +38,9 @@ module Uphold
           logger.fatal 'Backup is BAD'
         end
 
-        logger.info 'Done!'
+        t2 = Time.now
+        delta = t2 - t1
+        logger.info "Done! (#{format('%.2f', delta)}s)"
       ensure
         logger.debug "Removing tmpdir '#{transport.tmpdir}'"
         FileUtils.remove_entry_secure(transport.tmpdir)

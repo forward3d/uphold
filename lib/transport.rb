@@ -20,11 +20,15 @@ module Uphold
     def fetch
       logger.info "Transport starting #{self.class}"
       logger.debug "Temporary directory '#{@tmpdir}'"
+
+      t1 = Time.now
       path = fetch_backup
+      t2 = Time.now
+      delta = t2 - t1
       if path.nil?
-        logger.fatal 'Transport failed!'
+        logger.fatal "Transport failed! (#{format('%.2f', delta)}s)"
       else
-        logger.info 'Transport finished successfully'
+        logger.info "Transport finished successfully (#{format('%.2f', delta)}s)"
         path
       end
     end
