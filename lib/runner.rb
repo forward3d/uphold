@@ -12,15 +12,19 @@ module Uphold
     def start
       transport_params = @config[:transport][:settings]
       transport_params.merge!(dir: Dir.mktmpdir)
+      logger.info "Starting transport #{@transport}"
       transport = @transport.new(transport_params)
 
       engine_params = @config[:engine]
       engine_params.delete(:type)
       engine_params.delete(:klass)
       engine_params.merge!(path: transport.fetch)
-
+      logger.info "Starting engine #{@engine}"
       engine = @engine.new(engine_params)
-      engine.load
+
+      if engine.load
+        # tests
+      end
     end
 
   end
