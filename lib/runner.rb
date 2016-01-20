@@ -28,11 +28,13 @@ module Uphold
           if tests.run
             logger.info 'Backup is OK'
           else
-            logger.info 'Backup is BAD'
+            logger.fatal 'Backup is BAD'
           end
         else
-          logger.info 'No tests found'
+          logger.info 'No tests found, but OK'
         end
+      else
+        logger.fatal 'Backup is BAD'
       end
 
       logger.info 'Done!'
