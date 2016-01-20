@@ -4,7 +4,7 @@ module Uphold
   require 'bundler/setup'
   Bundler.require
   require 'yaml'
-  require 'open3' 
+  require 'open3'
 
   ENV['RACK_ENV'] ||= 'development'
 
@@ -21,7 +21,6 @@ module Uphold
   Config.load_transports
 
   run = Runner.new(config: Uphold::Config.all.first)
-  puts run.inspect
   run.start
 
 end
