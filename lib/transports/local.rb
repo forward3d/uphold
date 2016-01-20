@@ -7,7 +7,7 @@ module Uphold
         @folder = params[:folder]
       end
 
-      def fetch
+      def fetch_backup
         if File.file?(@path)
           tmp_path = File.join(@dir, File.basename(@path))
           logger.debug "Copying '#{@path}' to '#{tmp_path}'"
@@ -18,7 +18,7 @@ module Uphold
           logger.debug 'Done with transport'
           File.join(@dir, @folder)
         else
-          logger.error "No file exists at '#{@path}'"
+          logger.fatal "No file exists at '#{@path}'"
         end
       end
 

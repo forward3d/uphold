@@ -4,7 +4,18 @@ module Uphold
     include Command
 
     def load
-      fail "Your engine must implement the 'load' method"
+      process = load_backup
+      if process.success?
+        logger.info 'Engine finished successfully'
+        true
+      else
+        logger.error 'Engine failed!'
+        false
+      end
+    end
+
+    def load_backup
+      fail "Your engine must implement the 'load_backup' method"
     end
   end
 end
