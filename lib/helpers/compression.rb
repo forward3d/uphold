@@ -12,6 +12,7 @@ module Uphold
 
     def decompress(file, &blk)
       if compressed?(file)
+        logger.debug "Decompressing '#{File.basename(file)}'"
         extract(file).each do |decompressed_file|
           compressed?(decompressed_file) ? decompress(decompressed_file, &blk) : blk.call(decompressed_file)
         end
