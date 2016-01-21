@@ -6,6 +6,8 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v `pwd`/config:/opt/uphold/config \
   -v `pwd`/tests:/opt/uphold/tests \
-  -v `pwd`/test/blobs:/var/backups/mongo \
+  -v `pwd`/test/blobs:/var/backups \
+  -v `pwd`/custom/engines:/opt/uphold/lib/custom_engines \
+  -v `pwd`/custom/transports:/opt/uphold/lib/custom_transports \
   uphold:dockerfile \
-  config/local-mongo.yml
+  config/local.yml
