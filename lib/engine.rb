@@ -2,12 +2,16 @@ module Uphold
   class Engine
     include Logging
     include Command
+    include Sockets
+
+    attr_reader :port
 
     def initialize(params)
       @database = params[:database]
-      @docker_image = params[:docker][:image]
-      @docker_tag = params[:docker][:tag]
+      @docker_image = params[:docker_image]
+      @docker_tag = params[:docker_tag]
       @container = nil
+      @port = nil
     end
 
     def load(path:)
@@ -32,18 +36,31 @@ module Uphold
     def start_container
       if Docker::Image.exist?("#{@docker_image}:#{@docker_tag}")
         logger.debug "Docker image '#{@docker_image}' with tag '#{@docker_tag}' available"
-        image = Docker::Image.get("#{@docker_image}:#{@docker_tag}")
+        Docker::Image.get("#{@docker_image}:#{@docker_tag}")
       else
         logger.debug "Docker image '#{@docker_image}' with tag '#{@docker_tag}' does not exist locally, fetching"
-        image = Docker::Image.create('fromImage' => @docker_image, 'tag' => @docker_tag)
+        Docker::Image.create('fromImage' => @docker_image, 'tag' => @docker_tag)
       end
-      @container = image.run
+
+      @container = Docker::Container.create('Image' => "#{@docker_image}:#{@docker_tag}")
+      @container.start('PortBindings' => { "#{@port}/tcp" => [{ 'HostIp' => '0.0.0.0', 'HostPort' => @port.to_s }] })
       logger.debug "Docker container '#{@container.id[0..11]}' starting"
+      wait_for_container_to_be_ready
+    end
+
+    def wait_for_container_to_be_ready
+      logger.debug 'Waiting for container to be ready'
+      tcp_port_open?(container_ip_address, port)
+    end
+
+    def container_ip_address
+      '192.168.99.100'
     end
 
     def stop_container
       logger.debug "Docker container '#{@container.id[0..11]}' stopping"
       @container.stop
     end
+
   end
 end
