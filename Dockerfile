@@ -19,3 +19,5 @@ COPY Gemfile /opt/uphold/Gemfile
 COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install
 ADD . /opt/uphold
+
+CMD ["ruby", "environment.rb"]
