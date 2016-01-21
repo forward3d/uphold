@@ -13,7 +13,7 @@ module Uphold
     def start
       t1 = Time.now
       transport = @transport.new(@config[:transport][:settings])
-      engine = @engine.new(@config[:engine])
+      engine = @engine.new(@config[:engine][:settings])
 
       begin
         working_path = transport.fetch
