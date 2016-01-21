@@ -4,10 +4,10 @@ module Uphold
     include Command
 
     def initialize(config:)
-      @name = config[:name]
-      @engine = config[:engine][:klass]
-      @transport = config[:transport][:klass]
-      @config = config
+      @name = config.yaml[:name]
+      @engine = config.yaml[:engine][:klass]
+      @transport = config.yaml[:transport][:klass]
+      @config = config.yaml
     end
 
     def start

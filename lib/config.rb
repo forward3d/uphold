@@ -1,29 +1,31 @@
 module Uphold
   class Config
+    require 'yaml'
     include Logging
 
-    def self.all
-      Dir[File.join(ROOT, 'config', '*.yml')].sort.map do |config|
-        yaml = YAML.load_file(config)
-        yaml = deep_convert(yaml)
-        next unless valid?(yaml)
-        logger.info "Loaded config '#{yaml[:name]}' from '#{config}'"
-        supplement(yaml)
-      end.compact
+    attr_reader :yaml
+
+    def initialize(config)
+      fail unless config
+      yaml = YAML.load_file(config)
+      @yaml = deep_convert(yaml)
+      fail unless valid?
+      logger.info "Loaded config '#{@yaml[:name]}' from '#{config}'"
+      @yaml = supplement
     end
 
-    def self.valid?(yaml)
+    def valid?
       valid = true
-      valid = false if yaml[:enabled] != true
-      valid = false unless engines.any? { |e| e[:name] == yaml[:engine][:type] }
-      valid = false unless transports.any? { |e| e[:name] == yaml[:transport][:type] }
+      valid = false if @yaml[:enabled] != true
+      valid = false unless Config.engines.any? { |e| e[:name] == @yaml[:engine][:type] }
+      valid = false unless Config.transports.any? { |e| e[:name] == @yaml[:transport][:type] }
       valid
     end
 
-    def self.supplement(yaml)
-      yaml[:engine][:klass] = engines.find { |e| e[:name] == yaml[:engine][:type] }[:klass]
-      yaml[:transport][:klass] = transports.find { |e| e[:name] == yaml[:transport][:type] }[:klass]
-      yaml
+    def supplement
+      @yaml[:engine][:klass] = Config.engines.find { |e| e[:name] == @yaml[:engine][:type] }[:klass]
+      @yaml[:transport][:klass] = Config.transports.find { |e| e[:name] == @yaml[:transport][:type] }[:klass]
+      @yaml
     end
 
     def self.load_engines
@@ -66,7 +68,7 @@ module Uphold
 
     private
 
-    def self.deep_convert(element)
+    def deep_convert(element)
       return element.collect { |e| deep_convert(e) } if element.is_a?(Array)
       return element.inject({}) { |sh,(k,v)| sh[k.to_sym] = deep_convert(v); sh } if element.is_a?(Hash)
       element

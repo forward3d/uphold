@@ -2,6 +2,8 @@ module Uphold
   module Command
     module_function
 
+    require 'open3'
+
     def run_command(cmd, log_command = nil)
       logger.debug "Running command '#{cmd}'"
       log_command ||= "#{cmd.split(' ')[0]}"
