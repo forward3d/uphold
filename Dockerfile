@@ -20,4 +20,8 @@ COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install
 ADD . /opt/uphold
 
-CMD ["ruby", "environment.rb"]
+# this to just check the docker mounts works in development
+RUN rm -rf config
+RUN rm -rf tests
+
+ENTRYPOINT ["ruby", "environment.rb"]
