@@ -11,6 +11,7 @@ module Uphold
 
     def run
       logger.info 'Tests starting'
+      t1 = Time.now
 
       outcomes = @tests.collect do |t|
         process = run_command("UPHOLD_IP=#{@ip_address} UPHOLD_PORT=#{@port} ruby tests/#{t}", 'ruby')
@@ -23,7 +24,9 @@ module Uphold
         end
       end
 
-      logger.info 'Tests finished'
+      t2 = Time.now
+      delta = t2 - t1
+      logger.info "Tests finished (#{format('%.2f', delta)}s)"
       !outcomes.include?(false)
     end
   end

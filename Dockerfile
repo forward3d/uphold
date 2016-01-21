@@ -23,5 +23,6 @@ ADD . /opt/uphold
 # this to just check the docker mounts works in development
 RUN rm -rf config
 RUN rm -rf tests
+RUN rm -rf test
 
 ENTRYPOINT ["ruby", "environment.rb"]
