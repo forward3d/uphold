@@ -44,21 +44,25 @@ module Uphold
 
       @container = Docker::Container.create('Image' => "#{@docker_image}:#{@docker_tag}")
       @container.start('PortBindings' => { "#{@port}/tcp" => [{ 'HostIp' => '0.0.0.0', 'HostPort' => @port.to_s }] })
-      logger.debug "Docker container '#{@container.id[0..11]}' starting"
+      logger.debug "Docker container '#{container_id}' starting"
       wait_for_container_to_be_ready
     end
 
     def wait_for_container_to_be_ready
-      logger.debug 'Waiting for container to be ready'
-      tcp_port_open?(container_ip_address, port)
+      logger.debug "Waiting for Docker container '#{container_id}' to be ready"
+      tcp_port_open?(container_id, container_ip_address, port)
     end
 
     def container_ip_address
       '192.168.99.100'
     end
 
+    def container_id
+      @container.id[0..11]
+    end
+
     def stop_container
-      logger.debug "Docker container '#{@container.id[0..11]}' stopping"
+      logger.debug "Docker container '#{container_id}' stopping"
       @container.stop
     end
 
