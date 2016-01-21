@@ -12,18 +12,14 @@ module Uphold
 
     def start
       t1 = Time.now
-      transport_params = @config[:transport][:settings]
-      transport = @transport.new(transport_params)
+      transport = @transport.new(@config[:transport][:settings])
+      engine = @engine.new(@config[:engine])
+
       begin
         working_path = transport.fetch
+        engine.start_container
 
-        engine_params = @config[:engine]
-        engine_params.delete(:type)
-        engine_params.delete(:klass)
-        engine_params.merge!(path: working_path)
-        engine = @engine.new(engine_params)
-
-        if engine.load
+        if engine.load(path: working_path)
           if @config[:tests].any?
             tests = Tests.new(@config[:tests])
             if tests.run
@@ -42,6 +38,7 @@ module Uphold
         delta = t2 - t1
         logger.info "Done! (#{format('%.2f', delta)}s)"
       ensure
+        engine.stop_container
         logger.debug "Removing tmpdir '#{transport.tmpdir}'"
         FileUtils.remove_entry_secure(transport.tmpdir)
       end

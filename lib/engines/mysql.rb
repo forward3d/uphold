@@ -1,12 +1,7 @@
 module Uphold
   module Engines
     class Mysql < Engine
-      def initialize(database:, path:)
-        @database = database
-        @path = path
-      end
-
-      def load
+      def load_backup(path:)
         # do stuff
       end
     end

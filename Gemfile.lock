@@ -20,6 +20,10 @@ GEM
     builder (3.2.2)
     colored (1.2)
     diff-lcs (1.2.5)
+    docker-api (1.25.0)
+      excon (>= 0.38.0)
+      json
+    excon (0.45.4)
     git-up (0.5.12)
       colored (>= 1.2)
       grit
@@ -55,6 +59,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk (~> 2.2, >= 2.2.12)
+  docker-api (~> 1.25)
   git-up
   minitest (~> 5.8, >= 5.8.3)
   mongoid (~> 5.0, >= 5.0.2)

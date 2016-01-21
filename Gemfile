@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 # core
 gem 'rubyzip',  '~> 1.1', '>= 1.1.7'
 gem 'minitest', '~> 5.8', '>= 5.8.3'
+gem 'docker-api', '~> 1.25'
 
 # transports
 gem 'aws-sdk', '~> 2.2', '>= 2.2.12'
