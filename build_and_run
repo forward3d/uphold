@@ -6,5 +6,6 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v `pwd`/config:/opt/uphold/config \
   -v `pwd`/tests:/opt/uphold/tests \
+  -v `pwd`/test/blobs:/var/backups/mongo \
   uphold:dockerfile \
-  config/s3-mongo.yml
+  config/local-mongo.yml
