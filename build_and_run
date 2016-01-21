@@ -1,4 +1,10 @@
 #!/bin/bash
 
 docker build -t "uphold:dockerfile" .
-docker run -it -v /var/run/docker.sock:/var/run/docker.sock uphold:dockerfile
+docker run \
+  -it \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v `pwd`/config:/opt/uphold/config \
+  -v `pwd`/tests:/opt/uphold/tests \
+  uphold:dockerfile \
+  config/s3-mongo.yml
