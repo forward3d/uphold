@@ -54,7 +54,7 @@ module Uphold
     end
 
     def container_ip_address
-      '192.168.99.100'
+      @container.json['NetworkSettings']['IPAddress']
     end
 
     def container_id
