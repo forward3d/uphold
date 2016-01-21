@@ -15,6 +15,7 @@ module Uphold
         matching_file = matching_prefix.find { |s3_file| File.fnmatch(@filename, File.basename(s3_file)) }
 
         File.open(File.join(@tmpdir, File.basename(matching_file)), 'wb') do |file|
+          logger.info "Downloading '#{matching_file}' from S3 bucket #{@bucket}"
           s3.get_object({ bucket: @bucket, key: matching_file }, target: file)
           decompress(file) do |_b|
           end
