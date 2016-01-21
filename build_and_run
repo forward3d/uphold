@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker build -t "uphold:dockerfile" .
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock uphold:dockerfile
