@@ -2,9 +2,9 @@ module Uphold
   module Command
     module_function
 
-    def run_command(cmd)
+    def run_command(cmd, log_command = nil)
       logger.debug "Running command '#{cmd}'"
-      log_command = "#{cmd.split(' ')[0]}"
+      log_command ||= "#{cmd.split(' ')[0]}"
       Open3.popen3(cmd) do |_stdin, stdout, stderr, thread|
         # read each stream from a new thread
         { out: stdout, err: stderr }.each do |key, stream|
