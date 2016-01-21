@@ -1,29 +1,32 @@
 # Uphold
 
-*A backup that isn't tested is just a file that might contain something.*
+Schrödinger's Backup: *"The condition of any backup is unknown until a restore is attempted"*
 
-You're backing up your data, but are you regularly checking that the backups are actually useable? Uphold will help you automatically test them at a frequency you decide and can run programmatic tests against them to make sure they really have what you need.
+So you're backing up your databases, but are you regularly checking that the backups are actually useable? Uphold will help you automatically test them by downloading the backup, decompressing, loading and then running programmatic tests against it that you define to make sure they really have what you need.
 
 ### Prerequisites
 
-* Backups held either locally or on s3
-* A machine capable of running Docker
+* Backups
+* Docker
 
 ### Configuration
 
-In the `config` directory simply create as many yml files as you need, one per backup. An example config a MongoDB backup...
+Each config is constructed of a transport, an engine and tests. In your `/etc/uphold/conf.d` directory simply create as many yaml files as you need, one per backup. This directory is then made available to the Uphold container by being volume mounted.
+
+#### Example
 
     enabled: true
     name: s3-mongo
     engine:
       type: mongodb
-      database: f3d_clients
+      settings:
+        database: your_collection
     transport:
       type: s3
       settings:
         region: us-west-2
-        access_key_id: <redacted>
-        secret_access_key: <redacted>
+        access_key_id: your-access-key-id
+        secret_access_key: your-secret-access-key
         bucket: your-backups
         path: mongodb/systemx/{date}
         filename: mongodb.tar
@@ -31,15 +34,160 @@ In the `config` directory simply create as many yml files as you need, one per b
         date_offset: 0
         folder_within: mongodb/databases/MongoDB
     tests:
-      - test_clients.rb
+      - test_structure.rb
+      - test_data_integrity.rb
 
-##### enabled
+* `enabled`
+  * `true` or `false`, allows you to disable a config if needs be
+* `name`
+  * Just so that if it's referenced anywhere, you have a nicer name
 
-Either `true` or `false`, if `false` then the config won't be run or used.
+#### Transports
 
-##### name
+Transports are how you retrieve the backup file itself. They are also responsible for decompressing the file, we also support nested compression. Currently implemented transports are...
 
-This is
+* S3
+* Local file
+
+Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`
+
+##### Generic Parameters
+
+Transports all inherit these generic parameters...
+
+* `path`
+  * This is the path to the folder that the backup is inside, if it contains a date replace it with `{date}`, eg. `/var/backups/2016-01-21` would be `/var/backups/{date}`
+* `filename`
+  * The filename of the backup file, if it contains a date replace it with `{date}`, eg. `mongodb-2016-01-21.tar` would be `mongodb-{date}.tar`
+* `date_format` (default: `%Y-%m-%d`)
+  * If your filename or path contains a date, supply it's format here
+* `date_offset` (default: `0`)
+  * When using dates the code starts at `Date.today` and then subtracts this number, so for checking a backup that exists for yesterday, you would enter `1`
+* `folder_within`
+  * Once your backup has been decompressed it may have folders inside, if so, you need to provide where the last directory is, this generally can't be programmatically found as some database backups may contain folders in their own structure
+
+##### S3 (type: `s3`)
+
+The S3 transport allows you to pull your backup files from a bucket in S3. It has it's own extra settings...
+
+* `region`
+  * Provide the region that your S3 bucket resides in (eg. `us-west-2`)
+* `access_key_id`
+  * AWS access key that has privileges to read from the specified bucket
+* `secret_access_key`
+  * AWS secret access key that has privileges to read from the specified bucket
+
+Paths do not need to be complete with S3, as it provides globbing capability. So if you had a path like this...
+
+    my-service-backups/mongodb/2016.01.21.00.36.03/mongodb.tar
+
+Theres no realistic way for us to re-create that date, so you would do this instead...
+
+    path: my-service-backups/mongodb/{date}
+    filename: mongodb.tar
+    date_format: '%Y.%m.%d'
+
+As the `path` is sent to the S3 API as a prefix, it will match all folders, the code then picks the first one it matches correctly. So be aware that not being specific enough with the `date_format` could cause the wrong backup to be tested.
+
+###### S3 Transport Example
+
+    transport:
+      type: s3
+      settings:
+        region: us-west-2
+        access_key_id: your-access-key-id
+        secret_access_key: your-secret-access-key
+        bucket: your-backups
+        path: mongodb/systemx/{date}
+        filename: mongodb.tar
+        date_format: '%Y.%m.%d'
+        date_offset: 0
+        folder_within: mongodb/databases/MongoDB
+
+##### Local File (type: `local`)
+
+The local transport allows you to pull your backup files from the same machine that is running the Docker container. Be aware, since this code runs within a container you will need to add the volume that contains the backup when starting up. We auto-mount `/var/uphold` to the same place within the container to reduce confusion.
+
+It has no extra parameters and only uses the generic ones, `filename`, `path` and `folder_within`
+
+###### Local File Example
+
+    transport:
+      type: local
+      settings:
+        path: /var/uphold/mongodb
+        filename: mongodb.tar
+        folder_within: mongodb/databases/MongoDB
+
+#### Engines
+
+Engines are used to load the backup that was retrieved by the transport into the database. Databases are started inside fresh docker containers each time so no installation is required. Currently supported databases are...
+
+* MongoDB
+
+Custom engines can also be loaded at runtime if they are placed in `/etc/uphold/engines`
+
+##### Generic Parameters
+
+Engines all inherit these generic parameters, but are usually significantly easier to configure when compared to transports...
+
+* `type`
+  * The name of the engine class you want to use (eg. `mongodb`)
+* `database`
+  * The name of the database you want to recover, as your backup may contain multiple
+* `port`
+  * The port number that the database will run on (engine will provide a sane default)
+* `docker_image`
+  * The name of the Docker container (engine will provide a sane default)
+* `docker_tag`
+  * The tag of the Docker container (engine will provide a sane default)
+
+##### MongoDB (type: `mongodb`)
+
+Unless you need to change any of the defaults, a standard configuration for MongoDB will look quite small. Obviously in MongoDB databases are called collections, however you provide the collection name as the database.
+
+    engine:
+      type: mongodb
+      settings:
+        database: your_collection_name
+
+###### Full MongoDB Engine Example
+
+    engine:
+      type: mongodb
+      settings:
+        database: your_collection_name
+        docker_image: mongo
+        docker_tag: 3.2.1
+        port: 27017
+
+#### Tests
+
+Tests are the final step in configuration. They are how you validate that the data contained within your backup is really what you want, and that your backup is operating correctly. Tests are written in Ruby using Minitest. This gives you the most flexibility in writing tests programmatically as it supports both Unit & Spec tests. To configure a test you simply provide an array of ruby files you want to run...
+
+    tests:
+      - test_structure.rb
+      - test_data_integrity.rb
+
+Tests should be placed within the `/etc/uphold/tests` directory, all files inside will be volume mounted into the container so if you need extra files they are available to you.
+
+##### Example Test
+
+We need to establish a connection to the database, and the values will not be known in advance. So they will be provided to you by environmental variables `UPHOLD_IP` and `UPHOLD_PORT`. You must use these when connecting to your database. The database name will also be called `uphold` once loaded.
+
+    require 'minitest/autorun'
+    require 'mongoid'
+
+    class TestClients < Minitest::Test
+      Mongo::Logger.logger.level = Logger::FATAL
+      @@mongo = Mongo::Client.new("mongodb://#{ENV['UPHOLD_IP']}:#{ENV['UPHOLD_PORT']}/uphold")
+
+      def test_that_we_can_talk_to_mongo
+        assert_equal 1, @@mongo.collections.count
+      end
+    end
+
+Obviously this is just a simple test, but you write any number of tests you like. All must pass in order for the backup to be considered 'good'.
 
 ### Development
 
