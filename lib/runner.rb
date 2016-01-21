@@ -21,17 +21,17 @@ module Uphold
 
         if engine.load(path: working_path)
           if @config[:tests].any?
-            tests = Tests.new(@config[:tests])
+            tests = Tests.new(tests: @config[:tests], ip_address: engine.container_ip_address, port: engine.port)
             if tests.run
               logger.info 'Backup is OK'
             else
-              logger.fatal 'Backup is BAD'
+              logger.fatal "Backup for #{@config[:name]} is BAD"
             end
           else
             logger.info 'No tests found, but OK'
           end
         else
-          logger.fatal 'Backup is BAD'
+          logger.fatal "Backup for #{@config[:name]} is BAD"
         end
 
         t2 = Time.now
