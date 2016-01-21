@@ -1,0 +1,52 @@
+# Uphold
+
+*A backup that isn't tested is just a file that might contain something.*
+
+You're backing up your data, but are you regularly checking that the backups are actually useable? Uphold will help you automatically test them at a frequency you decide and can run programmatic tests against them to make sure they really have what you need.
+
+### Prerequisites
+
+* Backups held either locally or on s3
+* A machine capable of running Docker
+
+### Configuration
+
+In the `config` directory simply create as many yml files as you need, one per backup. An example config a MongoDB backup...
+
+    enabled: true
+    name: s3-mongo
+    engine:
+      type: mongodb
+      database: f3d_clients
+    transport:
+      type: s3
+      settings:
+        region: us-west-2
+        access_key_id: <redacted>
+        secret_access_key: <redacted>
+        bucket: your-backups
+        path: mongodb/systemx/{date}
+        filename: mongodb.tar
+        date_format: '%Y.%m.%d'
+        date_offset: 0
+        folder_within: mongodb/databases/MongoDB
+    tests:
+      - test_clients.rb
+
+##### enabled
+
+Either `true` or `false`, if `false` then the config won't be run or used.
+
+##### name
+
+This is
+
+### Development
+
+To build the docker image...
+
+    docker build -t "uphold:dockerfile" .
+
+To inspect the new image...
+
+    docker run -it uphold:dockerfile /bin/bash
