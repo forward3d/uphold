@@ -8,14 +8,12 @@ module Uphold
   Dir["#{ROOT}/lib/helpers/*.rb"].sort.each { |file| require file }
   Dir["#{ROOT}/lib/*.rb"].sort.each { |file| require file }
 
+  @config = Config.load_global
+
   include Logging
-  logger.level = Logger::DEBUG
+  logger.level = Logger.const_get(@config[:log_level])
   logger.info 'Starting Uphold'
 
-  Config.load_global
-  Config.load_engines
-  Config.load_transports
-
-  run = Runner.new(config: Uphold::Config.new(ARGV[0]))
-  run.start
+  Docker.url = @config[:docker_url]
+  logger.debug "Docker URL - '#{Docker.url}'"
 end
