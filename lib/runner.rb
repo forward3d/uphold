@@ -23,20 +23,27 @@ module Uphold
           if @config[:tests].any?
             tests = Tests.new(tests: @config[:tests], ip_address: engine.container_ip_address, port: engine.port)
             if tests.run
+              touch_state_file('ok')
               logger.info 'Backup is OK'
               exit 0
             else
               logger.fatal "Backup for #{@config[:name]} is BAD"
+              touch_state_file('bad')
               exit 1
             end
           else
             logger.info 'No tests found, but OK'
+            touch_state_file('ok_no_test')
             exit 0
           end
         else
           logger.fatal "Backup for #{@config[:name]} is BAD"
+          touch_state_file('bad')
           exit 1
         end
+      rescue => e
+        logger.error e
+        raise e
       ensure
         engine.stop_container
         logger.debug "Removing tmpdir '#{transport.tmpdir}'"
