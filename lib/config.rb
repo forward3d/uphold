@@ -29,7 +29,7 @@ module Uphold
     end
 
     def self.load_global
-      yaml = YAML.load_file('uphold.yml')
+      yaml = YAML.load_file(File.join('/', 'etc', 'uphold', 'uphold.yml'))
       yaml = deep_convert(yaml)
       Docker.url = yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
       logger.debug "Docker URL - '#{Docker.url}'"
