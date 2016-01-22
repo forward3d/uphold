@@ -8,15 +8,15 @@ module Uphold
     def initialize(config)
       fail unless config
       yaml = YAML.load_file(File.join('/etc', 'uphold', 'conf.d', config))
+      yaml.merge!(file: File.basename(config, '.yml'))
       @yaml = Config.deep_convert(yaml)
       fail unless valid?
-      logger.info "Loaded config '#{@yaml[:name]}' from '#{config}'"
+      logger.debug "Loaded config '#{@yaml[:name]}' from '#{config}'"
       @yaml = supplement
     end
 
     def valid?
       valid = true
-      valid = false if @yaml[:enabled] != true
       valid = false unless Config.engines.any? { |e| e[:name] == @yaml[:engine][:type] }
       valid = false unless Config.transports.any? { |e| e[:name] == @yaml[:transport][:type] }
       valid
@@ -28,16 +28,27 @@ module Uphold
       @yaml
     end
 
+    def self.load_configs
+      Dir['/etc/uphold/conf.d/*.yml'].sort.map do |file|
+        new(File.basename(file)).yaml
+      end
+    end
+
     def self.load_global
       yaml = YAML.load_file(File.join('/', 'etc', 'uphold', 'uphold.yml'))
       yaml = deep_convert(yaml)
       yaml[:log_level] ||= 'INFO'
       yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
+      yaml[:docker_container] ||= 'uphold-tester'
+      yaml[:docker_tag] ||= 'latest'
+      yaml[:docker_mounts] ||= []
+      yaml[:config_path] ||= '/etc/uphold'
+      yaml[:docker_log_path] ||= '/var/log/uphold'
       yaml
     end
 
     def self.load_engines
-      [Dir["#{@root}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_engine name: basename, klass: Object.const_get("Uphold::Engines::#{File.basename(file, '.rb').capitalize}")
@@ -56,7 +67,7 @@ module Uphold
     end
 
     def self.load_transports
-      [Dir["#{@root}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_transport name: basename, klass: Object.const_get("Uphold::Transports::#{File.basename(file, '.rb').capitalize}")
