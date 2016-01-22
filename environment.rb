@@ -11,8 +11,8 @@ module Uphold
   include Logging
   logger.level = Logger::DEBUG
   logger.info 'Starting Uphold'
-  logger.debug "Docker info - #{Docker.version}"
 
+  Config.load_global
   Config.load_engines
   Config.load_transports
 

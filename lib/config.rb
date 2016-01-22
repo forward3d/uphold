@@ -8,7 +8,7 @@ module Uphold
     def initialize(config)
       fail unless config
       yaml = YAML.load_file(File.join('/etc', 'uphold', 'conf.d', config))
-      @yaml = deep_convert(yaml)
+      @yaml = Config.deep_convert(yaml)
       fail unless valid?
       logger.info "Loaded config '#{@yaml[:name]}' from '#{config}'"
       @yaml = supplement
@@ -26,6 +26,13 @@ module Uphold
       @yaml[:engine][:klass] = Config.engines.find { |e| e[:name] == @yaml[:engine][:type] }[:klass]
       @yaml[:transport][:klass] = Config.transports.find { |e| e[:name] == @yaml[:transport][:type] }[:klass]
       @yaml
+    end
+
+    def self.load_global
+      yaml = YAML.load_file('uphold.yml')
+      yaml = deep_convert(yaml)
+      Docker.url = yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
+      logger.debug "Docker URL - '#{Docker.url}'"
     end
 
     def self.load_engines
@@ -68,7 +75,7 @@ module Uphold
 
     private
 
-    def deep_convert(element)
+    def self.deep_convert(element)
       return element.collect { |e| deep_convert(e) } if element.is_a?(Array)
       return element.inject({}) { |sh,(k,v)| sh[k.to_sym] = deep_convert(v); sh } if element.is_a?(Hash)
       element
