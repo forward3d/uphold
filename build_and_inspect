@@ -1,0 +1,13 @@
+#!/bin/bash
+
+docker build -t "uphold:dockerfile" .
+docker run \
+  -it \
+   --entrypoint=/bin/bash
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v `pwd`/dev/config:/etc/uphold/conf.d \
+  -v `pwd`/dev/tests:/etc/uphold/tests \
+  -v `pwd`/dev/blobs:/var/backups \
+  -v `pwd`/dev/custom/engines:/etc/uphold/engines \
+  -v `pwd`/dev/custom/transports:/etc/uphold/transports \
+  uphold:dockerfile

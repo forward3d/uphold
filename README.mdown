@@ -191,35 +191,12 @@ Obviously this is just a simple test, but you can write any number of tests you 
 
 ### Development
 
-To aid with development there is a helper script in the root directory called `build_and_run` which will build the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container that would otherwise be provided by the `/etc/uphold/uphold.yml` config file...
+To aid with development there is a helper script in the root directory called `build_and_run` and `build_and_inspect` which will build or inspect the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container that would otherwise be provided by the `/etc/uphold/uphold.yml` config file...
 
-* `dev/config/`
-* `dev/tests/`
-* `dev/blobs/`
-* `dev/custom/engines/`
-* `dev/custom/transports/`
+* `dev/config` -> `/etc/uphold/conf.d`
+* `dev/tests` -> `/etc/uphold/tests`
+* `dev/blobs` -> `/var/backups`
+* `dev/custom/engines` -> `/etc/uphold/engines`
+* `dev/custom/transports` -> `/etc/uphold/transports`
 
-However if you want to manually run things...
-
-To build the docker image...
-
-    docker build -t "uphold:dockerfile" .
-
-To inspect the new image...
-
-    docker run -it --entrypoint=/bin/bash uphold:dockerfile
-
-To run the image...
-
-    docker run \
-      -it \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      -v `pwd`/dev/config:/etc/uphold/conf.d \
-      -v `pwd`/dev/tests:/etc/uphold/tests \
-      -v `pwd`/dev/blobs:/var/backups \
-      -v `pwd`/dev/custom/engines:/etc/uphold/lib/custom_engines \
-      -v `pwd`/dev/custom/transports:/etc/uphold/lib/custom_transports \
-      uphold:dockerfile \
-      local.yml
-
-Remember to replace out the `local.yml` with one of your own.
+Remember to replace out the `local.yml` with one of your own in the `dev/config` directory.
