@@ -1,12 +1,20 @@
-module Uphold
-  require 'rubygems'
-  require 'rubygems/package'
-  require 'bundler/setup'
-  Bundler.require(:default, :ui)
-  load 'environment.rb'
+require 'rubygems'
+require 'rubygems/package'
+require 'bundler/setup'
+Bundler.require(:default, :ui)
+load 'environment.rb'
 
-  class Ui < Sinatra::Base
+module Uphold
+  class Ui < ::Sinatra::Base
+    register ::Sinatra::ActiveRecordExtension
+    set :database, adapter: 'sqlite3', database: '/var/uphold/uphold.sqlite3'
     include Logging
+
+    helpers do
+      def h(text)
+        Rack::Utils.escape_html(text)
+      end
+    end
 
     before do
       Config.load_engines
@@ -14,8 +22,7 @@ module Uphold
     end
 
     get '/' do
-      Config.engines.inspect
-      # 'Hello from docker!'
+      Config.transports.inspect
     end
   end
 end
