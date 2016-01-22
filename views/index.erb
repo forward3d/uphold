@@ -1,0 +1,14 @@
+<table>
+  <thead>
+    <th>Config Name</th>
+    <th>Run</th>
+  </thead>
+  <tbody>
+    <% @configs.each do |c| %>
+    <tr>
+      <td><%= c[:name] %></td>
+      <td><a href="/run/<%= c[:file] %>">Run</a></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
