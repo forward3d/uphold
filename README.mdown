@@ -7,13 +7,43 @@ So you're backing up your databases, but are you regularly checking that the bac
 ### Prerequisites
 
 * Backups
-* Docker
+* Docker (>= v1.3.*)
+
+### Installation
+
+Most of the installation goes around configuring the tool, you must create the following directory structure on the machine you want to run Uphold on...
+
+    /etc/uphold/
+    /etc/uphold/conf.d/
+    /etc/uphold/engines/
+    /etc/uphold/transports/
+    /etc/uphold/tests/
 
 ### Configuration
 
-Each config is constructed of a transport, an engine and tests. In your `/etc/uphold/conf.d` directory simply create as many yaml files as you need, one per backup. This directory is then made available to the Uphold container by being volume mounted.
+Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty), the settings inside are...
 
-#### Example
+* `docker_url` (default: `unix:///var/run/docker.sock`)
+  * If you connect to Docker via a TCP socket instead of a Unix one, then you would supply `tcp://example.com:5422` instead.
+* `docker_container` (default: `uphold`)
+  * If you need to customize the docker container and use a different one, you can override it here
+* `docker_tag` (default: `latest`)
+  * Can override the Docker container tag if you want to run from a specific version
+* `docker_mounts` (default: `none`)
+  * If your backups exist on the host machine, the folders they exist in need to be mounted into the container. You can specify them here as a YAML array of directories. They will be mounted at the same location inside the container
+
+#### `uphold.yml` Example
+
+    docker_url: unix:///var/run/docker.sock
+    docker_container: uphold
+    docker_tag: latest
+    docker_mounts:
+      - /var/my_backups
+      - /var/my_other_backups
+
+#### `/etc/uphold/conf.d` Example
+
+Each config is in YAML format, and is constructed of a transport, an engine and tests. In your `/etc/uphold/conf.d` directory simply create as many YAML files as you need, one per backup.
 
     enabled: true
     name: s3-mongo
@@ -42,16 +72,18 @@ Each config is constructed of a transport, an engine and tests. In your `/etc/up
 * `name`
   * Just so that if it's referenced anywhere, you have a nicer name
 
+See the sections below for how to configure Engines, Transports and Tests.
+
 #### Transports
 
-Transports are how you retrieve the backup file itself. They are also responsible for decompressing the file, we also support nested compression. Currently implemented transports are...
+Transports are how you retrieve the backup file itself. They are also responsible for decompressing the file, the code supports nested compression (compressed files within compressed files). Currently implemented transports are...
 
 * S3
 * Local file
 
-Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`
+Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`. If you need extra rubygems installed you will need to create a new Dockerfile with the base set to Uphold and then override the Gemfile.
 
-##### Generic Parameters
+##### Generic Transport Parameters
 
 Transports all inherit these generic parameters...
 
@@ -191,12 +223,13 @@ Obviously this is just a simple test, but you can write any number of tests you 
 
 ### Development
 
-To aid with development there is a helper script in the root directory called `build_and_run` and `build_and_inspect` which will build or inspect the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container that would otherwise be provided by the `/etc/uphold/uphold.yml` config file...
+To aid with development there is a helper script in the root directory called `build_and_run` and `build_and_inspect` which will build or inspect the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container...
 
-* `dev/config` -> `/etc/uphold/conf.d`
+* `dev/uphold.yml` -> `/etc/uphold/uphold.yml`
+* `dev/conf.d` -> `/etc/uphold/conf.d`
 * `dev/tests` -> `/etc/uphold/tests`
-* `dev/blobs` -> `/var/backups`
 * `dev/custom/engines` -> `/etc/uphold/engines`
 * `dev/custom/transports` -> `/etc/uphold/transports`
+* `dev/blobs` -> `/var/backups`
 
 Remember to place a `development.yml` config of your own in the `dev/config` directory.
