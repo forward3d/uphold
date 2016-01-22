@@ -48,7 +48,8 @@ module Uphold
       @container = Docker::Container.create(
         'Image' => "#{UPHOLD[:docker_container]}:#{UPHOLD[:docker_tag]}",
         'Cmd' => [params[:slug] + '.yml'],
-        'Volumes' => volumes
+        'Volumes' => volumes,
+        'Env' => ["UPHOLD_LOG_FILENAME=#{Time.now.to_i}_#{params[:slug]}"]
       )
 
       @container.start('Binds' => volumes.map { |v, h| "#{v}:#{h.keys.first}" })
