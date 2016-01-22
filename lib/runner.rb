@@ -24,23 +24,27 @@ module Uphold
             tests = Tests.new(tests: @config[:tests], ip_address: engine.container_ip_address, port: engine.port)
             if tests.run
               logger.info 'Backup is OK'
+              exit 0
             else
               logger.fatal "Backup for #{@config[:name]} is BAD"
+              exit 1
             end
           else
             logger.info 'No tests found, but OK'
+            exit 0
           end
         else
           logger.fatal "Backup for #{@config[:name]} is BAD"
+          exit 1
         end
-
-        t2 = Time.now
-        delta = t2 - t1
-        logger.info "Done! (#{format('%.2f', delta)}s)"
       ensure
         engine.stop_container
         logger.debug "Removing tmpdir '#{transport.tmpdir}'"
         FileUtils.remove_entry_secure(transport.tmpdir)
+
+        t2 = Time.now
+        delta = t2 - t1
+        logger.info "Done! (#{format('%.2f', delta)}s)"
       end
     end
   end

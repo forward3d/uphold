@@ -11,3 +11,9 @@ docker run \
   -v `pwd`/dev/custom/transports:/etc/uphold/transports \
   uphold:dockerfile \
   development.yml
+
+if [ $? -eq 0 ]; then
+  echo Success
+else
+  echo Failed
+fi
