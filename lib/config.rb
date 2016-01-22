@@ -7,7 +7,7 @@ module Uphold
 
     def initialize(config)
       fail unless config
-      yaml = YAML.load_file(config)
+      yaml = YAML.load_file(File.join('/etc', 'uphold', 'conf.d', config))
       @yaml = deep_convert(yaml)
       fail unless valid?
       logger.info "Loaded config '#{@yaml[:name]}' from '#{config}'"
@@ -29,7 +29,7 @@ module Uphold
     end
 
     def self.load_engines
-      [Dir["#{ROOT}/lib/engines/*.rb"], Dir["#{ROOT}/lib/custom_engines/*.rb"]].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_engine name: basename, klass: Object.const_get("Uphold::Engines::#{File.basename(file, '.rb').capitalize}")
@@ -48,7 +48,7 @@ module Uphold
     end
 
     def self.load_transports
-      [Dir["#{ROOT}/lib/transports/*.rb"], Dir["#{ROOT}/lib/custom_transports/*.rb"]].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_transport name: basename, klass: Object.const_get("Uphold::Transports::#{File.basename(file, '.rb').capitalize}")

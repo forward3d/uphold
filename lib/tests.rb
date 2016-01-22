@@ -14,7 +14,7 @@ module Uphold
       t1 = Time.now
 
       outcomes = @tests.collect do |t|
-        process = run_command("UPHOLD_IP=#{@ip_address} UPHOLD_PORT=#{@port} ruby tests/#{t}", 'ruby')
+        process = run_command("UPHOLD_IP=#{@ip_address} UPHOLD_PORT=#{@port} ruby /etc/uphold/tests/#{t}", 'ruby')
         if process.success?
           logger.info "Test #{t} finished successfully"
           true
