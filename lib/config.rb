@@ -37,7 +37,7 @@ module Uphold
     end
 
     def self.load_engines
-      [Dir["#{ROOT}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{@root}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_engine name: basename, klass: Object.const_get("Uphold::Engines::#{File.basename(file, '.rb').capitalize}")
@@ -56,7 +56,7 @@ module Uphold
     end
 
     def self.load_transports
-      [Dir["#{ROOT}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{@root}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_transport name: basename, klass: Object.const_get("Uphold::Transports::#{File.basename(file, '.rb').capitalize}")

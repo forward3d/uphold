@@ -2,11 +2,11 @@ module Uphold
   require 'rubygems'
   require 'rubygems/package'
   require 'bundler/setup'
-  Bundler.require
+  Bundler.require(:default)
 
-  ROOT = File.dirname(File.expand_path(__FILE__))
-  Dir["#{ROOT}/lib/helpers/*.rb"].sort.each { |file| require file }
-  Dir["#{ROOT}/lib/*.rb"].sort.each { |file| require file }
+  @root = File.dirname(File.expand_path(__FILE__))
+  Dir["#{@root}/lib/helpers/*.rb"].sort.each { |file| require file }
+  Dir["#{@root}/lib/*.rb"].sort.each { |file| require file }
 
   @config = Config.load_global
 
