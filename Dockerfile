@@ -18,7 +18,7 @@ WORKDIR /opt/uphold
 COPY Gemfile /opt/uphold/Gemfile
 COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install
-ADD . /opt/uphold
+ADD .
 
 # this to just check the docker mounts works in development
 RUN rm -rf dev
