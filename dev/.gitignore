@@ -5,3 +5,4 @@ conf.d/*.yml
 custom/engines/*.rb
 custom/transports/*.rb
 tests/*.rb
+logs/*.log
