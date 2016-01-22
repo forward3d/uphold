@@ -199,4 +199,4 @@ To aid with development there is a helper script in the root directory called `b
 * `dev/custom/engines` -> `/etc/uphold/engines`
 * `dev/custom/transports` -> `/etc/uphold/transports`
 
-Remember to replace out the `local.yml` with one of your own in the `dev/config` directory.
+Remember to place a `development.yml` config of your own in the `dev/config` directory.

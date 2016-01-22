@@ -10,4 +10,4 @@ docker run \
   -v `pwd`/dev/custom/engines:/etc/uphold/engines \
   -v `pwd`/dev/custom/transports:/etc/uphold/transports \
   uphold:dockerfile \
-  local.yml
+  development.yml
