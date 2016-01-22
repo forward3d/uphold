@@ -7,7 +7,7 @@ So you're backing up your databases, but are you regularly checking that the bac
 ### Prerequisites
 
 * Backups
-* Docker (>= v1.3.*)
+* Docker (>= v1.3.*) with the ability to talk to the Docker API
 
 ### Installation
 
