@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build -t "uphold:dockerfile" .
+docker build --tag="uphold-tester:dockerfile" --file=Dockerfile.tester .
 docker run \
   -it \
   -v /var/run/docker.sock:/var/run/docker.sock \
@@ -10,7 +10,7 @@ docker run \
   -v `pwd`/dev/blobs:/var/backups \
   -v `pwd`/dev/custom/engines:/etc/uphold/engines \
   -v `pwd`/dev/custom/transports:/etc/uphold/transports \
-  uphold:dockerfile \
+  uphold-tester:dockerfile \
   development.yml
 
 if [ $? -eq 0 ]; then

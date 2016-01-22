@@ -1,0 +1,17 @@
+FROM ruby:2.3-slim
+
+RUN apt-get update
+RUN apt-get -y install build-essential
+RUN apt-get -y install sqlite3 libsqlite3-dev
+
+WORKDIR /opt/uphold
+COPY Gemfile /opt/uphold/Gemfile
+COPY Gemfile.lock /opt/uphold/Gemfile.lock
+RUN bundle install --without tester development
+ADD . /opt/uphold
+
+# this to just check the docker mounts works in development
+RUN rm -rf dev
+
+EXPOSE 80
+CMD ["bundle", "exec", "rackup", "config.ru", "-p", "80", "-s", "thin", "-o", "0.0.0.0"]

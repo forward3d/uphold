@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker build --tag="uphold-ui:dockerfile" --file="Dockerfile.ui" .
+docker run \
+  -it \
+   --entrypoint=/bin/bash \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v `pwd`/dev/uphold.yml:/etc/uphold/uphold.yml \
+  uphold-ui:dockerfile
