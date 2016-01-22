@@ -163,7 +163,7 @@ Unless you need to change any of the defaults, a standard configuration for Mong
 
 #### Tests
 
-Tests are the final step in configuration. They are how you validate that the data contained within your backup is really what you want, and that your backup is operating correctly. Tests are written in Ruby using Minitest. This gives you the most flexibility in writing tests programmatically as it supports both Unit & Spec tests. To configure a test you simply provide an array of ruby files you want to run...
+Tests are the final step in configuration. They are how you validate that the data contained within your backup is really what you want, and that your backup is operating correctly. Tests are written in Ruby using Minitest, this gives you the most flexibility in writing tests programmatically as it supports both Unit & Spec tests. To configure a test you simply provide an array of ruby files you want to run...
 
     tests:
       - test_structure.rb
@@ -187,9 +187,19 @@ We need to establish a connection to the database, and the values will not be kn
       end
     end
 
-Obviously this is just a simple test, but you write any number of tests you like. All must pass in order for the backup to be considered 'good'.
+Obviously this is just a simple test, but you can write any number of tests you like. All must pass in order for the backup to be considered 'good'.
 
 ### Development
+
+To aid with development there is a helper script in the root directory called `build_and_run` which will build the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container that would otherwise be provided by the `/etc/uphold/uphold.yml` config file...
+
+* `dev/config/`
+* `dev/tests/`
+* `dev/blobs/`
+* `dev/custom/engines/`
+* `dev/custom/transports/`
+
+However if you want to manually run things...
 
 To build the docker image...
 
@@ -197,8 +207,19 @@ To build the docker image...
 
 To inspect the new image...
 
-    docker run -it uphold:dockerfile /bin/bash
+    docker run -it --entrypoint=/bin/bash uphold:dockerfile
 
 To run the image...
 
-    docker run -it -v /var/run/docker.sock:/var/run/docker.sock uphold:dockerfile
+    docker run \
+      -it \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v `pwd`/dev/config:/etc/uphold/conf.d \
+      -v `pwd`/dev/tests:/etc/uphold/tests \
+      -v `pwd`/dev/blobs:/var/backups \
+      -v `pwd`/dev/custom/engines:/etc/uphold/lib/custom_engines \
+      -v `pwd`/dev/custom/transports:/etc/uphold/lib/custom_transports \
+      uphold:dockerfile \
+      local.yml
+
+Remember to replace out the `local.yml` with one of your own.
