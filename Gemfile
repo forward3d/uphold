@@ -20,6 +20,7 @@ end
 
 group :ui do
   gem 'sinatra', '~> 1.4', '>= 1.4.6'
+  gem 'sinatra-activerecord', '~> 2.0', '>= 2.0.9'
   gem 'thin', '~> 1.6', '>= 1.6.4'
 end
 
