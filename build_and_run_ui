@@ -1,10 +1,15 @@
 #!/bin/bash
 
+docker build --tag="uphold-tester:dockerfile" --file=Dockerfile.tester .
 docker build --tag="uphold-ui:dockerfile" --file=Dockerfile.ui .
+
 docker run \
   -it \
   -p 80:80 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v `pwd`/dev/uphold.yml:/etc/uphold/uphold.yml \
-  -v `pwd`/dev/logs:/var/logs/uphold \
+  -v `pwd`/dev/conf.d:/etc/uphold/conf.d \
+  -v `pwd`/dev/logs:/var/log/uphold \
+  -v `pwd`/dev/custom/engines:/etc/uphold/engines \
+  -v `pwd`/dev/custom/transports:/etc/uphold/transports \
   uphold-ui:dockerfile
