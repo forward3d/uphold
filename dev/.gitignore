@@ -1,4 +1,6 @@
-blobs/*
+blobs/*.tar
+blobs/*.gz
+blobs/*.zip
 conf.d/*.yml
 custom/engines/*.rb
 custom/transports/*.rb
