@@ -47,10 +47,18 @@ GEM
     origin (2.1.1)
     pg (0.18.4)
     posix-spawn (0.3.11)
+    rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
     rubyzip (1.1.7)
     sequel (4.30.0)
+    sinatra (1.4.6)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     sqlite3 (1.3.11)
     thread_safe (0.3.5)
+    tilt (2.0.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
@@ -67,6 +75,7 @@ DEPENDENCIES
   pg (~> 0.18.4)
   rubyzip (~> 1.1, >= 1.1.7)
   sequel (~> 4.30)
+  sinatra (~> 1.4, >= 1.4.6)
   sqlite3 (~> 1.3, >= 1.3.11)
 
 BUNDLED WITH
