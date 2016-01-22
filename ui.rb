@@ -6,8 +6,6 @@ load 'environment.rb'
 
 module Uphold
   class Ui < ::Sinatra::Base
-    register ::Sinatra::ActiveRecordExtension
-    set :database, adapter: 'sqlite3', database: '/var/uphold/uphold.sqlite3'
     include Logging
 
     helpers do
