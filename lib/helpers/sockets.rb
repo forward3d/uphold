@@ -13,13 +13,13 @@ module Uphold
           logger.info "Docker container '#{id}' ready!"
           return true
         rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-          logger.debug "Docker container '#{id}' port is #{port} not open yet"
+          logger.warn "Docker container '#{id}' port is #{port} not open yet"
           sleep(sleep_period)
           retry
         end
       end
     rescue Timeout::Error
-      logger.debug "Docker container '#{id}' port #{port} did not open port in a timely manner"
+      logger.error "Docker container '#{id}' port #{port} did not open port in a timely manner"
       return false
     end
   end

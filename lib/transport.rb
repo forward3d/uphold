@@ -27,6 +27,8 @@ module Uphold
       delta = t2 - t1
       if path.nil?
         logger.fatal "Transport failed! (#{format('%.2f', delta)}s)"
+        touch_state_file('bad_transport')
+        exit 1
       else
         logger.info "Transport finished successfully (#{format('%.2f', delta)}s)"
         path

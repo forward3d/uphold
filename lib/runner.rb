@@ -17,7 +17,11 @@ module Uphold
 
       begin
         working_path = transport.fetch
-        engine.start_container
+        unless engine.start_container
+          touch_state_file('bad_container')
+          logger.info 'Backup is BAD'
+          exit 0
+        end
 
         if engine.load(path: working_path)
           if @config[:tests].any?
