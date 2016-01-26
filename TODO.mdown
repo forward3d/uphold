@@ -3,3 +3,4 @@
 * Link the containers together instead of opening ports
 * Create deb for easier installation
 * Example log rotation script
+* Proper error handling for S3 transport
