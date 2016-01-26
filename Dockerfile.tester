@@ -3,7 +3,7 @@ RUN apt-get update
 RUN apt-get -y install build-essential
 
 # mysql
-RUN apt-get -y install libmysqlclient-dev
+RUN apt-get -y install libmysqlclient-dev mysql-client
 
 # postgres
 RUN apt-get -y install libpq-dev
