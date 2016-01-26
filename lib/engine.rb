@@ -28,6 +28,10 @@ module Uphold
         logger.error "Engine failed! (#{format('%.2f', delta)}s)"
         false
       end
+    rescue => e
+      raise e
+    ensure
+      touch_state_file('bad_engine')
     end
 
     def load_backup
