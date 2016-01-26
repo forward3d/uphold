@@ -5,7 +5,7 @@ module Uphold
     require 'socket'
     require 'timeout'
 
-    def tcp_port_open?(id, host, port, timeout = 10, sleep_period = 0.5)
+    def tcp_port_open?(id, host, port, timeout = 10, sleep_period = 2.0)
       Timeout.timeout(timeout) do
         begin
           s = TCPSocket.new(host, port)
