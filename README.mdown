@@ -9,6 +9,33 @@ So you're backing up your databases, but are you regularly checking that the bac
 * Backups
 * Docker (>= v1.3.*) with the ability to talk to the Docker API
 
+### How does it work?
+
+In order to make the processes are repeatable as possible all the code and databases are run inside single process Docker containers. There are currently three types of container, the `ui`, the `tester` and the database itself. Each triggers the next...
+
+    uphold-ui
+     \
+      -> uphold-tester
+         \
+          -> mongo
+
+This way each time the process is run, the containers are fresh and new, they hold no state. So each time the database is imported into a cold database.
+
+The output of each process run is a log and a state file and these are stored in `/var/log/uphold` by default. The UI reads these files to display the state of the runs occurring, no other state is stored in the system.
+
+    /var/log/uphold
+    /var/log/uphold/1453489253_my_db_backup.log
+    /var/log/uphold/1453489253_my_db_backup_ok
+
+This is the output of a backup run for 'my_db_backup' that was started at `1453489253` unix epoch time. The log file contains the full output of the run, and the state file holds nothing, it's name shows the status of the run...
+
+* `ok` Backup was declared good, was transported, loaded and tested successfully
+* `ok_no_test` Backup was successfully transported and loaded into the DB, but there were no tests to run
+* `bad_tests` At least one of the programmatic tests failed
+* `bad` An error occurred either in transport or loading into the db engine
+
+Logs are not automatically rotated or removed, it is left up to you to decide how long you want to keep them. Once they become compressed, they will disappear from the UI.
+
 ### Installation
 
 Most of the installation goes around configuring the tool, you must create the following directory structure on the machine you want to run Uphold on...
@@ -18,22 +45,32 @@ Most of the installation goes around configuring the tool, you must create the f
     /etc/uphold/engines/
     /etc/uphold/transports/
     /etc/uphold/tests/
+    /var/log/uphold
 
 ### Configuration
 
 Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty), the settings inside are...
 
+* `log_level` (default: `INFO`)
+  * You can increase the verbosity of the logging by changing this to `DEBUG`
+* `config_path` (default: `/etc/uphold`)
+  * Generally only overridden in development on OSX when you need to mount your own src directory
+* `docker_log_path` (default: `/var/log/uphold`)
+  * Generally only overridden in development on OSX when you need to mount your own src directory
 * `docker_url` (default: `unix:///var/run/docker.sock`)
-  * If you connect to Docker via a TCP socket instead of a Unix one, then you would supply `tcp://example.com:5422` instead.
+  * If you connect to Docker via a TCP socket instead of a Unix one, then you would supply `tcp://example.com:5422` instead (untested)
 * `docker_container` (default: `uphold`)
   * If you need to customize the docker container and use a different one, you can override it here
 * `docker_tag` (default: `latest`)
   * Can override the Docker container tag if you want to run from a specific version
 * `docker_mounts` (default: `none`)
-  * If your backups exist on the host machine, the folders they exist in need to be mounted into the container. You can specify them here as a YAML array of directories. They will be mounted at the same location inside the container
+  * If your backups exist on the host machine and you want to use the `local` transport, the folders they exist in need to be mounted into the container. You can specify them here as a YAML array of directories. They will be mounted at the same location inside the container
 
 #### `uphold.yml` Example
 
+    log_level: DEBUG
+    config_path: /etc/uphold
+    docker_log_path: /var/log/uphold
     docker_url: unix:///var/run/docker.sock
     docker_container: uphold
     docker_tag: latest
@@ -81,7 +118,7 @@ Transports are how you retrieve the backup file itself. They are also responsibl
 * S3
 * Local file
 
-Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`. If you need extra rubygems installed you will need to create a new Dockerfile with the base set to Uphold and then override the Gemfile.
+Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`. If you need extra rubygems installed you will need to create a new Dockerfile with the base set to `uphold-tester` and then override the Gemfile and re-bundle. Then adjust your `uphold.yml` to use your new container.
 
 ##### Generic Transport Parameters
 
@@ -96,7 +133,7 @@ Transports all inherit these generic parameters...
 * `date_offset` (default: `0`)
   * When using dates the code starts at `Date.today` and then subtracts this number, so for checking a backup that exists for yesterday, you would enter `1`
 * `folder_within`
-  * Once your backup has been decompressed it may have folders inside, if so, you need to provide where the last directory is, this generally can't be programmatically found as some database backups may contain folders in their own structure
+  * Once your backup has been decompressed it may have folders inside, if so, you need to provide where the last directory is, this generally can't be programmatically found as some database backups may contain folders in their own structure.
 
 ##### S3 (type: `s3`)
 
