@@ -10,6 +10,7 @@ module Uphold
       @database = params[:database]
       @docker_image = params[:docker_image]
       @docker_tag = params[:docker_tag]
+      @docker_env = params[:docker_env]
       @container = nil
       @port = nil
     end
@@ -42,7 +43,10 @@ module Uphold
         Docker::Image.create('fromImage' => @docker_image, 'tag' => @docker_tag)
       end
 
-      @container = Docker::Container.create('Image' => "#{@docker_image}:#{@docker_tag}")
+      @container = Docker::Container.create(
+        'Image' => "#{@docker_image}:#{@docker_tag}",
+        'Env' => @docker_env
+      )
       @container.start('PortBindings' => { "#{@port}/tcp" => [{ 'HostIp' => '0.0.0.0', 'HostPort' => @port.to_s }] })
       logger.debug "Docker container '#{container_id}' starting"
       wait_for_container_to_be_ready
