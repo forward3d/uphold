@@ -12,6 +12,7 @@ module Uphold
       @yaml = Config.deep_convert(yaml)
       fail unless valid?
       logger.debug "Loaded config '#{@yaml[:name]}' from '#{config}'"
+      @yaml[:tests] ||= []
       @yaml = supplement
     end
 
