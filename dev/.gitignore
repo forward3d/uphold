@@ -7,5 +7,5 @@ custom/transports/*.rb
 tests/*.rb
 logs/*.log
 logs/*_ok
-logs/*_ok_no_test
-logs/*_bad
+logs/*_ok*
+logs/*_bad*
