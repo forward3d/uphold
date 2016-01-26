@@ -28,7 +28,7 @@ module Uphold
               exit 0
             else
               logger.fatal "Backup for #{@config[:name]} is BAD"
-              touch_state_file('bad')
+              touch_state_file('bad_tests')
               exit 1
             end
           else
