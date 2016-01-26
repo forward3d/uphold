@@ -29,9 +29,8 @@ module Uphold
         false
       end
     rescue => e
-      raise e
-    ensure
       touch_state_file('bad_engine')
+      raise e
     end
 
     def load_backup
