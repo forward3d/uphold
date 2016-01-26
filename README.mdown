@@ -4,6 +4,10 @@ Schrödinger's Backup: *"The condition of any backup is unknown until a restore 
 
 So you're backing up your databases, but are you regularly checking that the backups are actually useable? Uphold will help you automatically test them by downloading the backup, decompressing, loading and then running programmatic tests against it that you define to make sure they really have what you need.
 
+### Preface
+
+This project is very new and subsequently very beta so contributions and pulls are very much welcomed. We have a TODO file with things that we know about that would be awesome if worked on.
+
 ### Prerequisites
 
 * Backups
@@ -195,6 +199,7 @@ It has no extra parameters and only uses the generic ones, `filename`, `path` an
 Engines are used to load the backup that was retrieved by the transport into the database. Databases are started inside fresh docker containers each time so no installation is required. Currently supported databases are...
 
 * MongoDB
+* MySQL
 
 Custom engines can also be loaded at runtime if they are placed in `/etc/uphold/engines`
 
@@ -232,6 +237,25 @@ Unless you need to change any of the defaults, a standard configuration for Mong
         docker_tag: 3.2.1
         port: 27017
 
+##### MySQL (type: `mysql`)
+
+    engine:
+      type: mysql
+      settings:
+        database: your_database_name
+        sql_file: your_sql_file.sql
+
+###### Full mysql Engine Example
+
+    engine:
+      type: mysql
+      settings:
+        database: your_database_name
+        docker_image: mariadb
+        docker_tag: 5.5.42
+        port: 3306
+        sql_file: MySQL.sql
+
 #### Tests
 
 Tests are the final step in configuration. They are how you validate that the data contained within your backup is really what you want, and that your backup is operating correctly. Tests are written in Ruby using Minitest, this gives you the most flexibility in writing tests programmatically as it supports both Unit & Spec tests. To configure a test you simply provide an array of ruby files you want to run...
@@ -244,14 +268,14 @@ Tests should be placed within the `/etc/uphold/tests` directory, all files insid
 
 ##### Example Test
 
-We need to establish a connection to the database, and the values will not be known in advance. So they will be provided to you by environmental variables `UPHOLD_IP` and `UPHOLD_PORT`. You must use these when connecting to your database. The database name will also be called `uphold` once loaded.
+We need to establish a connection to the database, and the values will not be known in advance. So they will be provided to you by environmental variables `UPHOLD_IP`, `UPHOLD_PORT` and `UPHOLD_DB`. You must use these when connecting to your database.
 
     require 'minitest/autorun'
     require 'mongoid'
 
     class TestClients < Minitest::Test
       Mongo::Logger.logger.level = Logger::FATAL
-      @@mongo = Mongo::Client.new("mongodb://#{ENV['UPHOLD_IP']}:#{ENV['UPHOLD_PORT']}/uphold")
+      @@mongo = Mongo::Client.new("mongodb://#{ENV['UPHOLD_IP']}:#{ENV['UPHOLD_PORT']}/#{ENV['UPHOLD_DB']}")
 
       def test_that_we_can_talk_to_mongo
         assert_equal 1, @@mongo.collections.count
