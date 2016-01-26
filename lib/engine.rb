@@ -4,7 +4,7 @@ module Uphold
     include Command
     include Sockets
 
-    attr_reader :port
+    attr_reader :port, :database
 
     def initialize(params)
       @database = params[:database]

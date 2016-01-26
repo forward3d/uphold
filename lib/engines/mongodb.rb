@@ -11,7 +11,7 @@ module Uphold
 
       def load_backup(path)
         Dir.chdir(path) do
-          run_command("mongorestore --verbose --host #{container_ip_address} --port #{@port} --drop --db uphold #{@database}")
+          run_command("mongorestore --verbose --host #{container_ip_address} --port #{@port} --drop --db #{@database} #{@database}")
         end
       end
     end

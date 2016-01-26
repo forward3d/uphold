@@ -25,7 +25,7 @@ module Uphold
 
         if engine.load(path: working_path)
           if @config[:tests].any?
-            tests = Tests.new(tests: @config[:tests], ip_address: engine.container_ip_address, port: engine.port)
+            tests = Tests.new(tests: @config[:tests], ip_address: engine.container_ip_address, port: engine.port, database: engine.database)
             if tests.run
               touch_state_file('ok')
               logger.info 'Backup is OK'
