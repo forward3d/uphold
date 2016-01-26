@@ -1,6 +1,8 @@
 # TODO
 
+* Tests, tests and more tests
 * Link the containers together instead of opening ports
 * Create deb for easier installation
 * Example log rotation script
 * Proper error handling for S3 transport
+* Auto detect the SQL file for the MySQL engine
