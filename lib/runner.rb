@@ -18,7 +18,7 @@ module Uphold
       begin
         working_path = transport.fetch
         unless engine.start_container
-          touch_state_file('bad_container')
+          touch_state_file('bad_engine')
           logger.info 'Backup is BAD'
           exit 0
         end

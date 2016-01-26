@@ -36,7 +36,7 @@ This is the output of a backup run for 'my_db_backup' that was started at `14534
 * `ok` Backup was declared good, was transported, loaded and tested successfully
 * `ok_no_test` Backup was successfully transported and loaded into the DB, but there were no tests to run
 * `bad_transport` Transport failed
-* `bad_container` Container did not open it's port in a timely manner
+* `bad_engine` Container did not open it's port in a timely manner
 * `bad_tests` At least one of the programmatic tests failed
 * `bad` An error occurred either in transport or loading into the db engine
 
