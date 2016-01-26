@@ -52,6 +52,8 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    rethinkdb (2.2.0.2)
+      json
     rubyzip (1.1.7)
     sequel (4.30.0)
     sinatra (1.4.6)
@@ -79,6 +81,7 @@ DEPENDENCIES
   mongoid (~> 5.0, >= 5.0.2)
   mysql2 (~> 0.4.2)
   pg (~> 0.18.4)
+  rethinkdb (~> 2.2, >= 2.2.0.2)
   rubyzip (~> 1.1, >= 1.1.7)
   sequel (~> 4.30)
   sinatra (~> 1.4, >= 1.4.6)

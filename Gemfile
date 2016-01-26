@@ -10,9 +10,10 @@ group :tester do
   gem 'minitest', '~> 5.8', '>= 5.8.3'
 
   # engines
-  gem 'pg',      '~> 0.18.4'
-  gem 'mysql2',  '~> 0.4.2'
-  gem 'mongoid', '~> 5.0', '>= 5.0.2'
+  gem 'pg',        '~> 0.18.4'
+  gem 'mysql2',    '~> 0.4.2'
+  gem 'mongoid',   '~> 5.0', '>= 5.0.2'
+  gem 'rethinkdb', '~> 2.2', '>= 2.2.0.2'
 
   # transports
   gem 'aws-sdk', '~> 2.2', '>= 2.2.12'
