@@ -21,7 +21,7 @@ In order to make the processes are repeatable as possible all the code and datab
      \
       -> uphold-tester
          \
-          -> mongo
+          -> engine-container
 
 This way each time the process is run, the containers are fresh and new, they hold no state. So each time the database is imported into a cold database.
 
