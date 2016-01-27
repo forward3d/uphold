@@ -6,3 +6,4 @@
 * Example log rotation script
 * Proper error handling for S3 transport
 * Auto detect the SQL file for the MySQL engine
+* Allow the user to specify the collections to import through the MongoDB engine
