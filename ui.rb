@@ -37,8 +37,8 @@ module Uphold
     end
 
     get '/logs/:filename' do
-      # refactor, dangerous
-      File.open(File.join('/var/log/uphold', params[:filename]))
+      @log = File.join('/var/log/uphold', params[:filename])
+      erb :log
     end
 
     private
