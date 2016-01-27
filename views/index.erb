@@ -11,9 +11,13 @@
       <td><a href="/run/<%= c[:file] %>">Run</a></td>
       <td>
         <% unless @logs[c[:name]].nil? %>
-          <% @logs[c[:name]].each do |log| %>
+          <% @logs[c[:name]].each_with_index do |log,i| %>
             <a href="/logs/<%= log[:filename] %>"><img title="<%= log[:state] %>" src="/images/<%= log[:state] %>.png" /></a>
-            <%= epoch_to_datetime(log[:epoch]) %>
+            <% if i == 0 %>
+              <strong><%= epoch_to_datetime(log[:epoch]) %></strong>
+            <% else %>
+              <%= epoch_to_datetime(log[:epoch]) %>
+            <% end %>
           <% end %>
         <% else %>
           No logs
