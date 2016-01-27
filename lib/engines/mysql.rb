@@ -13,7 +13,7 @@ module Uphold
 
       def load_backup(path)
         Dir.chdir(path) do
-          run_command("mysql -u root --host=#{container_ip_address} #{@database} < #{@sql_file}")
+          run_command("mysql -u root --host=#{container_ip_address} --port=#{@port} #{@database} < #{@sql_file}")
         end
       end
     end
