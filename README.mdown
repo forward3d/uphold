@@ -93,7 +93,7 @@ Each config is in YAML format, and is constructed of a transport, an engine and 
     engine:
       type: mongodb
       settings:
-        database: your_collection
+        database: your_db_name
     transport:
       type: s3
       settings:
@@ -220,19 +220,19 @@ Engines all inherit these generic parameters, but are usually significantly easi
 
 ##### MongoDB (type: `mongodb`)
 
-Unless you need to change any of the defaults, a standard configuration for MongoDB will look quite small. Obviously in MongoDB databases are called collections, however you provide the collection name as the database.
+Unless you need to change any of the defaults, a standard configuration for MongoDB will look quite small.
 
     engine:
       type: mongodb
       settings:
-        database: your_collection_name
+        database: your_db_name
 
 ###### Full MongoDB Engine Example
 
     engine:
       type: mongodb
       settings:
-        database: your_collection_name
+        database: your_db_name
         docker_image: mongo
         docker_tag: 3.2.1
         port: 27017
