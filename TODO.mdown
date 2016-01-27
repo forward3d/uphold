@@ -1,9 +1,14 @@
 # TODO
 
 * Tests, tests and more tests
-* Link the containers together instead of opening ports
 * Create deb for easier installation
 * Example log rotation script
 * Proper error handling for S3 transport
 * Auto detect the SQL file for the MySQL engine
 * Allow the user to specify the collections to import through the MongoDB engine
+* Move all the code to start containers into a helper to DRY it up
+* API calls should actually catch some errors and respond appropriately
+* Config names should be checked that they are safe to be used in URLs
+* Refactor the way that the UI collects up the logs, it's slow and cumbersome
+* Create an upstart/systemd script to start the uphold-ui container with the correct volume mounts
+* Some sort of authentication
