@@ -50,7 +50,7 @@ module Uphold
         'Image' => "#{@docker_image}:#{@docker_tag}",
         'Env' => @docker_env
       )
-      @container.start('PortBindings' => { "#{@port}/tcp" => [{ 'HostIp' => '0.0.0.0', 'HostPort' => @port.to_s }] })
+      @container.start
       logger.debug "Docker container '#{container_id}' starting"
       wait_for_container_to_be_ready
     end
