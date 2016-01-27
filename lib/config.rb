@@ -38,7 +38,7 @@ module Uphold
     def self.load_global
       yaml = YAML.load_file(File.join('/', 'etc', 'uphold', 'uphold.yml'))
       yaml = deep_convert(yaml)
-      yaml[:log_level] ||= 'INFO'
+      yaml[:log_level] ||= 'DEBUG'
       yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
       yaml[:docker_container] ||= 'uphold-tester'
       yaml[:docker_tag] ||= 'latest'

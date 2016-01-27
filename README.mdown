@@ -57,8 +57,8 @@ Most of the installation goes around configuring the tool, you must create the f
 
 Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty), the settings inside are...
 
-* `log_level` (default: `INFO`)
-  * You can increase the verbosity of the logging by changing this to `DEBUG`
+* `log_level` (default: `DEBUG`)
+  * You can decrease the verbosity of the logging by changing this to `INFO`, but not recommended
 * `config_path` (default: `/etc/uphold`)
   * Generally only overridden in development on OSX when you need to mount your own src directory
 * `docker_log_path` (default: `/var/log/uphold`)
