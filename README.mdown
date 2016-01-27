@@ -40,7 +40,7 @@ This is the output of a backup run for 'my_db_backup' that was started at `14534
 * `bad_tests` At least one of the programmatic tests failed
 * `bad` An error occurred either in transport or loading into the db engine
 
-Logs are not automatically rotated or removed, it is left up to you to decide how long you want to keep them. Once they become compressed, they will disappear from the UI.
+Logs are not automatically rotated or removed, it is left up to you to decide how long you want to keep them. Once they become compressed, they will disappear from the UI. The same goes for the exited Docker containers of 'uphold-tester', they are left on the system incase you wish to inspect them. The database containers however are wiped after they are used.
 
 ### Installation
 
@@ -72,6 +72,8 @@ Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty),
 * `docker_mounts` (default: `none`)
   * If your backups exist on the host machine and you want to use the `local` transport, the folders they exist in need to be mounted into the container. You can specify them here as a YAML array of directories. They will be mounted at the same location inside the container
 
+If you change the global config you will need to restart the UI docker container, as some settings are only read at launch time.
+
 #### `uphold.yml` Example
 
     log_level: DEBUG
@@ -86,7 +88,7 @@ Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty),
 
 #### `/etc/uphold/conf.d` Example
 
-Each config is in YAML format, and is constructed of a transport, an engine and tests. In your `/etc/uphold/conf.d` directory simply create as many YAML files as you need, one per backup.
+Each config is in YAML format, and is constructed of a transport, an engine and tests. In your `/etc/uphold/conf.d` directory simply create as many YAML files as you need, one per backup. Configs in this directory are re-read, so you don't need to restart the UI container if you add new ones.
 
     enabled: true
     name: s3-mongo
@@ -346,4 +348,4 @@ To aid with development there is a helper script in the root directory called `b
 * `dev/custom/transports` -> `/etc/uphold/transports`
 * `dev/blobs` -> `/var/backups`
 
-Remember to place a `development.yml` config of your own in the `dev/config` directory.
+Remember to place a `uphold.yml` config of your own in the `dev/config` directory.
