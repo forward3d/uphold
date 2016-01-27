@@ -33,6 +33,9 @@ module Uphold
         logger.info "Transport finished successfully (#{format('%.2f', delta)}s)"
         path
       end
+    rescue => e
+      touch_state_file('bad_transport')
+      raise e
     end
 
     def fetch_backup
