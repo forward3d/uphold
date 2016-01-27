@@ -71,6 +71,7 @@ module Uphold
     def stop_container
       logger.debug "Docker container '#{container_id}' stopping"
       @container.stop
+      @container.delete
     end
 
   end
