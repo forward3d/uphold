@@ -51,13 +51,17 @@ module Uphold
         'Env' => @docker_env
       )
       @container.start
-      logger.debug "Docker container '#{container_id}' starting"
+      logger.debug "Docker container '#{container_name}' starting"
       wait_for_container_to_be_ready
+    rescue => e
+      touch_state_file('bad_engine')
+      logger.info 'Backup is BAD'
+      raise e
     end
 
     def wait_for_container_to_be_ready
-      logger.debug "Waiting for Docker container '#{container_id}' to be ready"
-      tcp_port_open?(container_id, container_ip_address, port)
+      logger.debug "Waiting for Docker container '#{container_name}' to be ready"
+      tcp_port_open?(container_name, container_ip_address, port)
     end
 
     def container_ip_address
@@ -68,8 +72,12 @@ module Uphold
       @container.id[0..11]
     end
 
+    def container_name
+      File.basename @container.json['Name']
+    end
+
     def stop_container
-      logger.debug "Docker container '#{container_id}' stopping"
+      logger.debug "Docker container '#{container_name}' stopping"
       @container.stop
       @container.delete
     end
