@@ -31,7 +31,7 @@ The output of each process run is a log and a state file and these are stored in
     /var/log/uphold/1453489253_my_db_backup.log
     /var/log/uphold/1453489253_my_db_backup_ok
 
-This is the output of a backup run for 'my_db_backup' that was started at `1453489253` unix epoch time. The log file contains the full output of the run, and the state file holds nothing, it's name shows the status of the run...
+This is the output of a backup run for 'my_db_backup' that was started at `1453489253` unix epoch time. The log file contains the full output of the run, and the state file is an empty file, it's name shows the status of the run...
 
 * `ok` Backup was declared good, was transported, loaded and tested successfully
 * `ok_no_test` Backup was successfully transported and loaded into the DB, but there were no tests to run
