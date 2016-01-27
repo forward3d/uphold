@@ -41,6 +41,32 @@ module Uphold
       erb :log
     end
 
+    post '/api/1.0/backup' do
+      start_docker_container(params[:name])
+      200
+    end
+
+    get '/api/1.0/backups/:name' do
+      # get all the runs for the named config
+      content_type :json
+      @logs = logs[params[:name]]
+      if @logs.nil?
+        [].to_json
+      else
+        @logs.to_json
+      end
+    end
+
+    get '/api/1.0/backups/:name/latest' do
+      # get the latest state for the named config
+      @logs = logs[params[:name]]
+      if @logs.nil?
+        'none'
+      else
+        @logs.first[:state]
+      end
+    end
+
     private
 
     def start_docker_container(slug)

@@ -284,6 +284,57 @@ We need to establish a connection to the database, and the values will not be kn
 
 Obviously this is just a simple test, but you can write any number of tests you like. All must pass in order for the backup to be considered 'good'.
 
+### Running
+
+Once you have finished your configuration, to get the system running you only need to start the Docker container called 'uphold-ui'.
+
+    docker run \
+      --rm \
+      -p 80:80 \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v /etc/uphold:/etc/uphold \
+      -v /var/log/uphold:/var/log/uphold \
+      uphold-ui:latest
+
+* You must make sure that you mount in the `docker.sock` from wherever it resides.
+* Feel free to change the port number if you don't want it to start up on port 80.
+* Mount in the config and log directories as otherwise it can't read your configuration.
+
+Once the container is live you can browse to it, see all previous available runs for a backup and the states the ended in. You can manually start a backup test from here if you want to.
+
+### Scheduling
+
+No option to schedule backup runs exists at present. Until one exists you can use the API to trigger backup runs to start. This way you can schedule however you like, crontab, notifier or any other service capable of sending a POST.
+
+### API
+
+#### `GET /api/1.0/backups/config-name-here`
+
+This will return all the available backup runs for the config name provided in JSON format...
+
+    [
+      {
+        "epoch": 1453921377,
+        "state": "ok",
+        "filename": "1453921377_s3-mongo.log"
+      },
+      {
+        "epoch": 1453909916,
+        "state": "ok",
+        "filename": "1453909916_s3-mongo.log"
+      }
+    ]
+
+#### `GET /api/1.0/backups/config-name-here/latest`
+
+This will return a plain text string of the state of the last backup run for the config name provided. If no runs were available, it will return `none`
+
+#### `POST /api/1.0/backup`
+
+You must pass the name of the config you want to trigger in a form field called `name`. It will then start the run and return `200`. An example of how to trigger a backup run for the config named `s3-mongo`...
+
+    curl --data "name=s3-mongo" http://ip.of.your.container/api/1.0/backup
+
 ### Development
 
 To aid with development there is a helper script in the root directory called `build_and_run` and `build_and_inspect` which will build or inspect the Dockerfile and then run it using some default options. Since otherwise testing is a bit of a nightmare when trying to talk to containers on your local machine. Various folders from within the project directory will be auto-mounted into the container...
