@@ -51,6 +51,7 @@ td a {
 td a.run {
   background-image: url('/images/run.png');
   margin-right: 0;
+  margin-left: 10px;
   float: right;
 }
 
