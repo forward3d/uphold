@@ -41,7 +41,7 @@ module Uphold
       yaml = deep_convert(yaml)
       yaml[:log_level] ||= 'DEBUG'
       yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
-      yaml[:docker_container] ||= 'uphold-tester'
+      yaml[:docker_container] ||= 'forward3d/uphold-tester'
       yaml[:docker_tag] ||= 'latest'
       yaml[:docker_mounts] ||= []
       yaml[:config_path] ||= '/etc/uphold'

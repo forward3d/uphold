@@ -65,7 +65,7 @@ Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty),
   * Generally only overridden in development on OSX when you need to mount your own src directory
 * `docker_url` (default: `unix:///var/run/docker.sock`)
   * If you connect to Docker via a TCP socket instead of a Unix one, then you would supply `tcp://example.com:5422` instead (untested)
-* `docker_container` (default: `uphold`)
+* `docker_container` (default: `forward3d/uphold-tester`)
   * If you need to customize the docker container and use a different one, you can override it here
 * `docker_tag` (default: `latest`)
   * Can override the Docker container tag if you want to run from a specific version
@@ -82,7 +82,7 @@ If you change the global config you will need to restart the UI docker container
     config_path: /etc/uphold
     docker_log_path: /var/log/uphold
     docker_url: unix:///var/run/docker.sock
-    docker_container: uphold
+    docker_container: forward3d/uphold-tester
     docker_tag: latest
     docker_mounts:
       - /var/my_backups
