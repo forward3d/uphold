@@ -20,7 +20,7 @@ COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install --without ui development
 ADD . /opt/uphold
 
-# this to just check the docker mounts works in development
-RUN rm -rf dev
+# remove un-needed directories
+RUN rm -rf dev docs public views
 
 ENTRYPOINT ["ruby", "tester.rb"]

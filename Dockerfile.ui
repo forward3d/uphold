@@ -10,8 +10,8 @@ COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install --without tester development
 ADD . /opt/uphold
 
-# this to just check the docker mounts works in development
-RUN rm -rf dev
+# remove un-needed directories
+RUN rm -rf dev docs
 
 EXPOSE 80
 CMD ["bundle", "exec", "rackup", "config.ru", "-p", "80", "-s", "thin", "-o", "0.0.0.0"]
