@@ -4,7 +4,7 @@
     <th>Outcomes</th>
   </thead>
   <tbody>
-    <% @configs.each do |c| %>
+    <% @configs.sort_by { |c| c[:name] }.each do |c| %>
     <tr>
       <td class="config_name"><%= c[:name] %> <a class="run" href="/run/<%= c[:file] %>"></a></td>
       <td>
