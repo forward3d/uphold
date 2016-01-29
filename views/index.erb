@@ -1,24 +1,21 @@
 <table>
   <thead>
-    <th>Config Name</th>
-    <th>Actions</th>
+    <th class="config_name">Config Name</th>
     <th>Outcomes</th>
   </thead>
   <tbody>
     <% @configs.each do |c| %>
     <tr>
-      <td><%= c[:name] %></td>
-      <td><a href="/run/<%= c[:file] %>">Run</a></td>
+      <td class="config_name"><%= c[:name] %> <a class="run" href="/run/<%= c[:file] %>"></a></td>
       <td>
         <% unless @logs[c[:name]].nil? %>
-          <% @logs[c[:name]].each_with_index do |log,i| %>
-            <a href="/logs/<%= log[:filename] %>"><img title="<%= log[:state] %>" src="/images/<%= log[:state] %>.png" /></a>
-            <% if i == 0 %>
-              <strong><%= epoch_to_datetime(log[:epoch]) %></strong>
-            <% else %>
-              <%= epoch_to_datetime(log[:epoch]) %>
-            <% end %>
+        <ul>
+          <% @logs[c[:name]].each do |log| %>
+            <li>
+              <a title="<%= log[:state] %>" class="<%= log[:state] %>" href="/logs/<%= log[:filename] %>"></a> <%= epoch_to_datetime(log[:epoch]) %>
+            </li>
           <% end %>
+        </ul>
         <% else %>
           No logs
         <% end %>

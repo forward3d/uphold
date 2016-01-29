@@ -2,12 +2,13 @@ module Uphold
   class Config
     require 'yaml'
     include Logging
+    PREFIX = '/etc/uphold'
 
     attr_reader :yaml
 
     def initialize(config)
       fail unless config
-      yaml = YAML.load_file(File.join('/etc', 'uphold', 'conf.d', config))
+      yaml = YAML.load_file(File.join(PREFIX, 'conf.d', config))
       yaml.merge!(file: File.basename(config, '.yml'))
       @yaml = Config.deep_convert(yaml)
       fail unless valid?
@@ -30,13 +31,13 @@ module Uphold
     end
 
     def self.load_configs
-      Dir['/etc/uphold/conf.d/*.yml'].sort.map do |file|
+      Dir[File.join(PREFIX, 'conf.d', '*.yml')].sort.map do |file|
         new(File.basename(file)).yaml
       end
     end
 
     def self.load_global
-      yaml = YAML.load_file(File.join('/', 'etc', 'uphold', 'uphold.yml'))
+      yaml = YAML.load_file(File.join(PREFIX, 'uphold.yml'))
       yaml = deep_convert(yaml)
       yaml[:log_level] ||= 'DEBUG'
       yaml[:docker_url] ||= 'unix:///var/run/docker.sock'
@@ -45,11 +46,12 @@ module Uphold
       yaml[:docker_mounts] ||= []
       yaml[:config_path] ||= '/etc/uphold'
       yaml[:docker_log_path] ||= '/var/log/uphold'
+      yaml[:ui_datetime] ||= '%F %T %Z'
       yaml
     end
 
     def self.load_engines
-      [Dir["#{ROOT}/lib/engines/*.rb"], Dir['/etc/uphold/engines/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/engines/*.rb"], Dir[File.join(PREFIX, 'engines', '*.rb')]].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_engine name: basename, klass: Object.const_get("Uphold::Engines::#{File.basename(file, '.rb').capitalize}")
@@ -68,7 +70,7 @@ module Uphold
     end
 
     def self.load_transports
-      [Dir["#{ROOT}/lib/transports/*.rb"], Dir['/etc/uphold/transports/*.rb']].flatten.uniq.sort.each do |file|
+      [Dir["#{ROOT}/lib/transports/*.rb"], Dir[File.join(PREFIX, 'transports', '*.rb')]].flatten.uniq.sort.each do |file|
         require file
         basename = File.basename(file, '.rb')
         add_transport name: basename, klass: Object.const_get("Uphold::Transports::#{File.basename(file, '.rb').capitalize}")

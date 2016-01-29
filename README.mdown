@@ -71,6 +71,8 @@ Create a global config in `/etc/uphold/uphold.yml` (even if you leave it empty),
   * Can override the Docker container tag if you want to run from a specific version
 * `docker_mounts` (default: `none`)
   * If your backups exist on the host machine and you want to use the `local` transport, the folders they exist in need to be mounted into the container. You can specify them here as a YAML array of directories. They will be mounted at the same location inside the container
+* `ui_datetime` (default: `%F %T %Z`)
+  * Overrides the strftime used by the UI to display the outcomes, useful if you want to make it smaller or add info
 
 If you change the global config you will need to restart the UI docker container, as some settings are only read at launch time.
 

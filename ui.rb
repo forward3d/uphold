@@ -16,7 +16,7 @@ module Uphold
       end
 
       def epoch_to_datetime(epoch)
-        Time.at(epoch).utc.to_datetime
+        Time.at(epoch).utc.to_datetime.strftime(UPHOLD[:ui_datetime])
       end
     end
 
