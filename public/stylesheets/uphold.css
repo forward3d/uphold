@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'robotoregular';
+    src: url('/font/Roboto-Regular-webfont.eot');
+    src: url('/font/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/font/Roboto-Regular-webfont.woff') format('woff'),
+         url('/font/Roboto-Regular-webfont.ttf') format('truetype'),
+         url('/font/Roboto-Regular-webfont.svg#robotoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body {
+  padding: 40px;
+  font-family: 'robotoregular', sans-serif;
+}
+
+table {
+  border-collapse: collapse
+}
+
+table, th, td {
+  border: 1px solid #e6ece8
+}
+
+th {
+  font-size: larger;
+  text-align: left;
+  padding-left: 20px
+}
+
+th.config_name {
+  min-width: 140px;
+  padding: 20px;
+}
+
+td.config_name {
+  padding: 20px;
+  vertical-align: top;
+}
+
+td a {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  background-size: 20px;
+  margin-right: 5px;
+  vertical-align: top;
+}
+
+td a.run {
+  background-image: url('/images/run.png');
+  margin-right: 0;
+  float: right;
+}
+
+td a.running { background-image: url('/images/running.gif'); }
+td a.ok { background-image: url('/images/ok.png'); }
+td a.ok_no_test { background-image: url('/images/ok_no_test.png'); }
+td a.bad { background-image: url('/images/bad.png'); }
+td a.bad_tests { background-image: url('/images/bad_tests.png'); }
+td a.bad_transport { background-image: url('/images/bad_transport.png'); }
+td a.bad_engine { background-image: url('/images/bad_engine.png'); }
+
+ul {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  margin: 0;
+}
+
+li {
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
