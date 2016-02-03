@@ -18,5 +18,5 @@ COPY public /opt/uphold/public
 COPY views /opt/uphold/views
 COPY config.ru environment.rb ui.rb /opt/uphold/
 
-EXPOSE 80
-CMD ["bundle", "exec", "rackup", "config.ru", "-p", "80", "-s", "thin", "-o", "0.0.0.0"]
+EXPOSE 8079
+CMD ["bundle", "exec", "rackup", "config.ru", "-p", "8079", "-s", "thin", "-o", "0.0.0.0"]

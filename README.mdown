@@ -296,14 +296,14 @@ Once you have finished your configuration, to get the system running you only ne
 
     docker run \
       --rm \
-      -p 80:80 \
+      -p 8079:8079 \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v /etc/uphold:/etc/uphold \
       -v /var/log/uphold:/var/log/uphold \
       uphold-ui:latest
 
 * You must make sure that you mount in the `docker.sock` from wherever it resides.
-* Feel free to change the port number if you don't want it to start up on port 80.
+* Feel free to change the port number if you don't want it to start up on port 8079.
 * Mount in the config and log directories as otherwise it can't read your configuration.
 
 Once the container is live you can browse to it, see all previous available runs for a backup and the states the ended in. You can manually start a backup test from here if you want to.
