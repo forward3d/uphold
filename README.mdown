@@ -4,6 +4,8 @@ Schrödinger's Backup: *"The condition of any backup is unknown until a restore 
 
 So you're backing up your databases, but are you regularly checking that the backups are actually useable? Uphold will help you automatically test them by downloading the backup, decompressing, loading and then running programmatic tests against it that you define to make sure they really have what you need.
 
+![Uphold UI](https://raw.githubusercontent.com/forward3d/uphold/master/docs/screenshot_ui.png)
+
 ### Preface
 
 This project is very new and subsequently very beta so contributions and pulls are very much welcomed. We have a TODO file with things that we know about that would be awesome if worked on.
