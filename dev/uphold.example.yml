@@ -1,0 +1,10 @@
+log_level: DEBUG
+config_path: /Users/lloyd/code/f3d/uphold/dev
+docker_url: unix:///var/run/docker.sock
+docker_container: uphold-tester
+docker_tag: dockerfile
+docker_log_path: /Users/lloyd/code/f3d/uphold/dev/logs
+ui_datetime: '%F %T'
+docker_mounts:
+  - /var/backups
+  - /Users/lloyd/code/f3d/uphold/dev/blobs

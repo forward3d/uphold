@@ -1,6 +1,0 @@
-log_level: DEBUG
-docker_url: unix:///var/run/docker.sock
-docker_container: uphold
-docker_tag: dockerfile
-docker_mounts:
-  - /var/backups

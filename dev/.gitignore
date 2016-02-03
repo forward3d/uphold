@@ -9,3 +9,4 @@ logs/*.log
 logs/*_ok
 logs/*_ok*
 logs/*_bad*
+uphold.yml
