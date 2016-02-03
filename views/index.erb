@@ -6,13 +6,13 @@
   <tbody>
     <% @configs.sort_by { |c| c[:name] }.each do |c| %>
     <tr>
-      <td class="config_name"><%= c[:name] %> <a class="run" href="/run/<%= c[:file] %>"></a></td>
+      <td class="config_name"><%= c[:name] %> <a class="run" href="run/<%= c[:file] %>"></a></td>
       <td>
         <% unless @logs[c[:name]].nil? %>
         <ul>
           <% @logs[c[:name]].each do |log| %>
             <li>
-              <a title="<%= log[:state] %>" class="<%= log[:state] %>" href="/logs/<%= log[:filename] %>"></a> <%= epoch_to_datetime(log[:epoch]) %>
+              <a title="<%= log[:state] %>" class="<%= log[:state] %>" href="logs/<%= log[:filename] %>"></a> <%= epoch_to_datetime(log[:epoch]) %>
             </li>
           <% end %>
         </ul>
