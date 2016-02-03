@@ -5,10 +5,6 @@ docker run \
   -it \
    --entrypoint=/bin/bash \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v `pwd`/dev/uphold.yml:/etc/uphold/uphold.yml \
-  -v `pwd`/dev/conf.d:/etc/uphold/conf.d \
-  -v `pwd`/dev/tests:/etc/uphold/tests \
-  -v `pwd`/dev/blobs:/var/backups \
-  -v `pwd`/dev/custom/engines:/etc/uphold/engines \
-  -v `pwd`/dev/custom/transports:/etc/uphold/transports \
+  -v `pwd`/dev:/etc/uphold \
+  -v `pwd`/dev/logs:/var/log/uphold \
   uphold-tester:dockerfile

@@ -7,7 +7,7 @@ docker run \
   -v `pwd`/dev/logs:/var/log/uphold \
   -v `pwd`/dev:/etc/uphold \
   uphold-tester:dockerfile \
-  s3.yml
+  s3-mongo.yml
 
 if [ $? -eq 0 ]; then
   echo Success

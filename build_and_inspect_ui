@@ -5,6 +5,6 @@ docker run \
   -it \
    --entrypoint=/bin/bash \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v `pwd`/dev/uphold.yml:/etc/uphold/uphold.yml \
-  -v `pwd`/dev/logs:/var/logs/uphold \
+  -v `pwd`/dev:/etc/uphold \
+  -v `pwd`/dev/logs:/var/log/uphold \
   uphold-ui:dockerfile
