@@ -1,17 +1,22 @@
 FROM ruby:2.3-slim
 
 RUN apt-get update
-RUN apt-get -y install build-essential
 
 WORKDIR /opt/uphold
 COPY Gemfile /opt/uphold/Gemfile
 COPY Gemfile.lock /opt/uphold/Gemfile.lock
-RUN bundle install --without tester development
 
-ADD lib /opt/uphold/lib
-ADD public /opt/uphold/public
-ADD views /opt/uphold/views
-ADD config.ru environment.rb ui.rb /opt/uphold/
+RUN \
+  apt-get install -y build-essential && \
+  bundle install --without tester development && \
+  apt-get remove -y build-essential && \
+  apt-get autoremove -y && apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY lib /opt/uphold/lib
+COPY public /opt/uphold/public
+COPY views /opt/uphold/views
+COPY config.ru environment.rb ui.rb /opt/uphold/
 
 EXPOSE 80
 CMD ["bundle", "exec", "rackup", "config.ru", "-p", "80", "-s", "thin", "-o", "0.0.0.0"]

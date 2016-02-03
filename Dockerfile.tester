@@ -1,26 +1,20 @@
 FROM ruby:2.3-slim
 
 RUN apt-get update
-RUN apt-get -y install build-essential
-
-# mysql
-RUN apt-get -y install libmysqlclient-dev mysql-client
-
-# postgres
-RUN apt-get -y install libpq-dev
-
-# sqlite
-RUN apt-get -y install libsqlite3-dev
-
-# mongodb
-RUN apt-get -y install mongodb-clients
+RUN apt-get -y install libmysqlclient-dev mysql-client libpq-dev libsqlite3-dev mongodb-clients
 
 WORKDIR /opt/uphold
 COPY Gemfile /opt/uphold/Gemfile
 COPY Gemfile.lock /opt/uphold/Gemfile.lock
-RUN bundle install --without ui development
 
-ADD lib /opt/uphold/lib
-ADD environment.rb tester.rb /opt/uphold/
+RUN \
+  apt-get install -y build-essential && \
+  bundle install --without ui development && \
+  apt-get remove -y build-essential && \
+  apt-get autoremove -y && apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY lib /opt/uphold/lib
+COPY environment.rb tester.rb /opt/uphold/
 
 ENTRYPOINT ["ruby", "tester.rb"]
