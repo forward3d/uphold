@@ -49,19 +49,19 @@ td a {
 }
 
 td a.run {
-  background-image: url('images/run.png');
+  background-image: url('../images/run.png');
   margin-right: 0;
   margin-left: 10px;
   float: right;
 }
 
-td a.running { background-image: url('images/running.gif'); }
-td a.ok { background-image: url('images/ok.png'); }
-td a.ok_no_test { background-image: url('images/ok_no_test.png'); }
-td a.bad { background-image: url('images/bad.png'); }
-td a.bad_tests { background-image: url('images/bad_tests.png'); }
-td a.bad_transport { background-image: url('images/bad_transport.png'); }
-td a.bad_engine { background-image: url('images/bad_engine.png'); }
+td a.running { background-image: url('../images/running.gif'); }
+td a.ok { background-image: url('../images/ok.png'); }
+td a.ok_no_test { background-image: url('../images/ok_no_test.png'); }
+td a.bad { background-image: url('../images/bad.png'); }
+td a.bad_tests { background-image: url('../images/bad_tests.png'); }
+td a.bad_transport { background-image: url('../images/bad_transport.png'); }
+td a.bad_engine { background-image: url('../images/bad_engine.png'); }
 
 ul {
   padding-top: 10px;
