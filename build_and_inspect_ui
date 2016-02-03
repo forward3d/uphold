@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build --tag="uphold-ui:dockerfile" --file="Dockerfile.ui" .
+docker build --tag="uphold-ui:dockerfile" --file="dockerfiles/ui/Dockerfile" .
 docker run \
   -it \
    --entrypoint=/bin/bash \

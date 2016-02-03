@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build --tag="uphold-tester:dockerfile" --file="Dockerfile.tester" .
+docker build --tag="uphold-tester:dockerfile" --file="dockerfiles/tester/Dockerfile" .
 docker run \
   -it \
    --entrypoint=/bin/bash \

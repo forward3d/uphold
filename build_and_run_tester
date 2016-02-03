@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build --tag="uphold-tester:dockerfile" --file=Dockerfile.tester .
+docker build --tag="uphold-tester:dockerfile" --file="dockerfiles/tester/Dockerfile" .
 docker run \
   -it \
   -v /var/run/docker.sock:/var/run/docker.sock \
