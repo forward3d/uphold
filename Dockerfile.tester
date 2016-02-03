@@ -19,9 +19,8 @@ WORKDIR /opt/uphold
 COPY Gemfile /opt/uphold/Gemfile
 COPY Gemfile.lock /opt/uphold/Gemfile.lock
 RUN bundle install --without ui development
-ADD . /opt/uphold
 
-# remove un-needed directories
-RUN rm -rf dev docs public views
+ADD lib /opt/uphold/lib
+ADD environment.rb tester.rb /opt/uphold/
 
 ENTRYPOINT ["ruby", "tester.rb"]
