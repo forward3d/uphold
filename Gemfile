@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sequel',  '~> 4.30'
-gem 'sqlite3', '~> 1.3', '>= 1.3.11'
+gem 'sequel',     '~> 4.30'
 gem 'docker-api', '~> 1.25'
 
 group :tester do
@@ -14,6 +13,7 @@ group :tester do
   gem 'mysql2',    '~> 0.4.2'
   gem 'mongoid',   '~> 5.0', '>= 5.0.2'
   gem 'rethinkdb', '~> 2.2', '>= 2.2.0.2'
+  gem 'sqlite3',   '~> 1.3', '>= 1.3.11'
 
   # transports
   gem 'aws-sdk', '~> 2.2', '>= 2.2.12'
