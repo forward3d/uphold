@@ -2,7 +2,6 @@ FROM ruby:2.3-slim
 
 RUN apt-get update
 RUN apt-get -y install build-essential
-RUN apt-get -y install sqlite3 libsqlite3-dev
 
 WORKDIR /opt/uphold
 COPY Gemfile /opt/uphold/Gemfile
