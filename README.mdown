@@ -206,6 +206,7 @@ Engines are used to load the backup that was retrieved by the transport into the
 
 * MongoDB
 * MySQL
+* PostgreSQL
 
 Custom engines can also be loaded at runtime if they are placed in `/etc/uphold/engines`
 
@@ -233,7 +234,7 @@ Unless you need to change any of the defaults, a standard configuration for Mong
       settings:
         database: your_db_name
 
-###### Full MongoDB Engine Example
+###### Full `mongodb` Engine Example
 
     engine:
       type: mongodb
@@ -251,7 +252,7 @@ Unless you need to change any of the defaults, a standard configuration for Mong
         database: your_database_name
         sql_file: your_sql_file.sql
 
-###### Full mysql Engine Example
+###### Full `mysql` Engine Example
 
     engine:
       type: mysql
@@ -261,6 +262,27 @@ Unless you need to change any of the defaults, a standard configuration for Mong
         docker_tag: 5.5.42
         port: 3306
         sql_file: MySQL.sql
+
+##### PostgreSQL (type: `postgresql`)
+
+    engine:
+      type: mysql
+      settings:
+        database: your_database_name
+        sql_file: your_sql_file.sql
+
+###### Full `postgresql` Engine Example
+
+The `database` also becomes your username for when you run the tests.
+
+    engine:
+      type: postgresql
+      settings:
+        database: your_database_name
+        docker_image: postgres
+        docker_tag: 9.5.0
+        port: 5432
+        sql_file: PostgreSQL.sql
 
 #### Tests
 
