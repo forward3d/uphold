@@ -11,6 +11,7 @@ module Uphold
       @docker_image = params[:docker_image]
       @docker_tag = params[:docker_tag]
       @docker_env = params[:docker_env]
+      @timeout = params[:timeout] || 10
       @container = nil
       @port = nil
     end
@@ -61,7 +62,7 @@ module Uphold
 
     def wait_for_container_to_be_ready
       logger.debug "Waiting for Docker container '#{container_name}' to be ready"
-      tcp_port_open?(container_name, container_ip_address, port)
+      tcp_port_open?(container_name, container_ip_address, port, @timeout)
     end
 
     def container_ip_address

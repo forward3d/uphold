@@ -99,6 +99,7 @@ Each config is in YAML format, and is constructed of a transport, an engine and 
     engine:
       type: mongodb
       settings:
+        timeout: 10
         database: your_db_name
     transport:
       type: s3
@@ -224,6 +225,8 @@ Engines all inherit these generic parameters, but are usually significantly easi
   * The name of the Docker container (engine will provide a sane default)
 * `docker_tag`
   * The tag of the Docker container (engine will provide a sane default)
+* `timeout` (default: `10`)
+  * The number of seconds you will give the container to respond on it's TCP port. You may need to increase this if you start many backup tests at the same time.
 
 ##### MongoDB (type: `mongodb`)
 
