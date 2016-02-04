@@ -8,7 +8,7 @@ So you're backing up your databases, but are you regularly checking that the bac
 
 ### Preface
 
-This project is very new and subsequently very beta so contributions and pulls are very much welcomed. We have a TODO file with things that we know about that would be awesome if worked on.
+This project is very new and subsequently very beta so contributions and pulls are very much welcomed. We have a [TODO](TODO.mdown) file with things that we know about that would be awesome if worked on.
 
 ### Prerequisites
 

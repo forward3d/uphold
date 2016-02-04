@@ -12,3 +12,5 @@
 * Refactor the way that the UI collects up the logs, it's slow and cumbersome
 * Create an upstart/systemd script to start the uphold-ui container with the correct volume mounts
 * Some sort of authentication
+* PostgreSQL support
+* SQLite support
