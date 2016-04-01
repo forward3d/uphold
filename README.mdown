@@ -319,13 +319,14 @@ Obviously this is just a simple test, but you can write any number of tests you 
 
 Once you have finished your configuration, to get the system running you only need to start the Docker container called 'uphold-ui'.
 
+    docker pull forward3d/uphold-ui:latest
     docker run \
       --rm \
       -p 8079:8079 \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v /etc/uphold:/etc/uphold \
       -v /var/log/uphold:/var/log/uphold \
-      uphold-ui:latest
+      forward3d/uphold-ui:latest
 
 * You must make sure that you mount in the `docker.sock` from wherever it resides.
 * Feel free to change the port number if you don't want it to start up on port 8079.
