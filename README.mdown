@@ -6,6 +6,38 @@ So you're backing up your databases, but are you regularly checking that the bac
 
 ![Uphold UI](https://raw.githubusercontent.com/forward3d/uphold/master/docs/screenshot_ui.png)
 
+## Table of Contents
+ - [Preface](#preface)
+ - [Prerequisites](#prerequisites)
+ - [How does it work?](#how-does-it-work)
+ - [Installation](#installation)
+ - [Configuration](#configuration)
+   - [`uphold.yml` Example](#upholdyml-example)
+   - [`/etc/uphold/conf.d` Example](#etcupholdconfd-example)
+   - [Transports](#transports)
+     - [Generic Transport Parameters](#generic-transport-parameters)
+     - [S3 (type: `s3`)](#s3-type-s3)
+       - [S3 Transport Example](#s3-transport-example)
+     - [Local File (type: `local`)](#local-file-type-local)
+       - [Local File Example](#local-file-example)
+   - [Engines](#engines)
+     - [Generic Parameters](#generic-parameters)
+     - [MongoDB (type: `mongodb`)](#mongodb-type-mongodb)
+       - [Full `mongodb` Engine Example](#full-mongodb-engine-example)
+     - [MySQL (type: `mysql`)](#mysql-type-mysql)
+       - [Full `mysql` Engine Example](#full-mysql-engine-example)
+     - [PostgreSQL (type: `postgresql`)](#postgresql-type-postgresql)
+       - [Full `postgresql` Engine Example](#full-postgresql-engine-example)
+   - [Tests](#tests)
+     - [Example Test](#example-test)
+ - [Running](#running)
+ - [Scheduling](#scheduling)
+ - [API](#api)
+   - [`GET /api/1.0/backups/config-name-here`](#get-api10backupsconfig-name-here)
+   - [`GET /api/1.0/backups/config-name-here/latest`](#get-api10backupsconfig-name-herelatest)
+   - [`POST /api/1.0/backup`](#post-api10backup)
+ - [Development](#development)
+
 ### Preface
 
 This project is very new and subsequently very beta so contributions and pulls are very much welcomed. We have a [TODO](TODO.mdown) file with things that we know about that would be awesome if worked on.
