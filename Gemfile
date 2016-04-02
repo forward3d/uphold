@@ -17,6 +17,8 @@ group :tester do
 
   # transports
   gem 'aws-sdk', '~> 2.2', '>= 2.2.12'
+  gem 'mime-types', '<= 2.99.1' # required by fog
+  gem 'fog', '~> 1.38', '>= 1.22.0'
 end
 
 group :ui do

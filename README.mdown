@@ -18,6 +18,8 @@ So you're backing up your databases, but are you regularly checking that the bac
      - [Generic Transport Parameters](#generic-transport-parameters)
      - [S3 (type: `s3`)](#s3-type-s3)
        - [S3 Transport Example](#s3-transport-example)
+     - [Rackspace Cloud Files (type: `rscf`)](#rackspace-cloud-files-type-rscf)
+       - [Rackspace Cloud Files Transport Example](#rackspace-cloud-files-transport-example)
      - [Local File (type: `local`)](#local-file-type-local)
        - [Local File Example](#local-file-example)
    - [Engines](#engines)
@@ -161,6 +163,7 @@ See the sections below for how to configure Engines, Transports and Tests.
 Transports are how you retrieve the backup file itself. They are also responsible for decompressing the file, the code supports nested compression (compressed files within compressed files). Currently implemented transports are...
 
 * S3
+* Rackspace Cloud Files
 * Local file
 
 Custom transports can also be loaded at runtime if they are placed in `/etc/uphold/transports`. If you need extra rubygems installed you will need to create a new Dockerfile with the base set to `uphold-tester` and then override the Gemfile and re-bundle. Then adjust your `uphold.yml` to use your new container.
@@ -217,6 +220,36 @@ As the `path` is sent to the S3 API as a prefix, it will match all folders, the 
         date_format: '%Y.%m.%d'
         date_offset: 0
         folder_within: mongodb/databases/MongoDB
+
+##### Rackspace Cloud Files (type: `rscf`)
+
+The Rackspace Cloud Files transport allows you to pull your backup files from a container in Cloud Files. It has it's own extra settings:
+
+* `region`
+  * The region that your Cloud Files container resides in (eg. `ord`)
+* `username`
+  * The username of a user with privileges to read from Cloud Files
+* `api_key`
+  * The API key for `username`
+* `container`
+  * The name of the container to load in Cloud Files
+
+If your backup is in the root of `container`, specify a blank string for the `path` setting.
+
+    path: ''
+
+###### Rackspace Cloud Files Transport Example
+
+    transport:
+      type: rscf
+      settings:
+        region: iad
+        username: your-rackspace-username
+        api_key: your-rackspace-username-api-key
+        container: backups
+        path: mysql/website1
+        filename: MySQL.sql.gz
+        folder_within: ./
 
 ##### Local File (type: `local`)
 
