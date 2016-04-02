@@ -6,6 +6,7 @@ module Uphold
         @region = params[:region]
         @username = params[:username]
         @api_key = params[:api_key]
+        @container = params[:container]
       end
 
       def fetch_backup
@@ -21,11 +22,14 @@ module Uphold
                 :ssl_verify_peer => false
             }
         })
-        logger.debug "Loading container '#{@path}'."
-        container = rscf.directories.new :key => @path
+        logger.debug "Loading container '#{@container}'."
+        container = rscf.directories.new :key => @container
 
         File.open(File.join(@tmpdir, File.basename(@filename)), 'wb') do |file|
-          logger.info "Downloading '#{@filename}' from Rackspace Cloud Files container '#{@path}'."
+          unless @path.blank?
+            @filename = "#{@path}/#{@filename}"
+          end
+          logger.info "Downloading '#{@filename}' from Rackspace Cloud Files container '#{@container}'."
           container.files.get(@filename) do | data, remaining, content_length |
             file.syswrite data
           end
