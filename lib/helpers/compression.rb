@@ -50,26 +50,29 @@ module Uphold
     end
 
     def gzip_decompress(input_file, _opts = {})
+      blocksize_to_read = 10240000
       File.join(File.dirname(input_file), File.basename(input_file, '.*')).tap do |output_file|
         open(output_file, 'w:binary') do |output|
           Zlib::GzipReader.open(input_file) do |gz|
-            output.write gz.read(BUFFER_SIZE) until gz.eof?
+            while buffer = gz.read(blocksize_to_read)
+              output.write buffer until gz.eof?
+            end
           end
         end
       end
     end
-
     # be wary of directories and tar long links
     def tar_decompress(input_file, _opts = {})
-      files = []
-      File.open(input_file) do |input_file_io|
-        Gem::Package::TarReader.new(input_file_io) do |tar|
-          tar.rewind
-          tar.each do |entry|
-            files << save_tar_entry(entry, File.dirname(input_file)) if entry.file?
-          end
-        end
+      logger.info "Input file is #{File.basename(input_file)}"
+      logger.debug "Files in #{@tmpdir}/#{Dir.entries(@tmpdir)}"
+      logger.debug "tar xfv #{@tmpdir}/#{File.basename(input_file)}. -C #{@tmpdir}"
+      if ::File.exists?("#{@tmpdir}/#{File.basename(input_file,".tar")}/databases/MySQL.sql")
+	logger.info "Already extracted"
+	else	
+      system("tar xfv #{@tmpdir}/#{File.basename(input_file)} -C #{@tmpdir}")
       end
+      files = []
+      files << "#{@tmpdir}/#{File.basename(input_file,".tar")}/databases/MySQL.sql"
       files
     end
 
