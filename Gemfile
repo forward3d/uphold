@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sequel',     '~> 4.30'
-gem 'docker-api', '~> 1.25'
+gem 'docker-api', '~> 1.33.2'
 
 group :tester do
   # core
