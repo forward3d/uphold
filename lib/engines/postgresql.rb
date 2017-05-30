@@ -8,7 +8,7 @@ module Uphold
         @docker_tag ||= '9.5.0'
         @docker_env ||= ["POSTGRES_USER=#{@database}", "POSTGRES_DB=#{@database}"]
         @port ||= 5432
-        @sql_file ||= 'PostgreSQL.sql'
+        @sql_file = params[:sql_file] ||  'PostgreSQL.sql'
       end
 
       def load_backup(path)
