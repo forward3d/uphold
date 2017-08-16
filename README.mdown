@@ -301,7 +301,7 @@ Unless you need to change any of the defaults, a standard configuration for Mong
 ##### PostgreSQL (type: `postgresql`)
 
     engine:
-      type: mysql
+      type: postgresql
       settings:
         database: your_database_name
         sql_file: your_sql_file.sql
