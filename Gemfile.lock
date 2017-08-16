@@ -21,11 +21,11 @@ GEM
     colored (1.2)
     daemons (1.2.3)
     diff-lcs (1.2.5)
-    docker-api (1.25.0)
+    docker-api (1.33.2)
       excon (>= 0.38.0)
       json
     eventmachine (1.0.9.1)
-    excon (0.45.4)
+    excon (0.55.0)
     git-up (0.5.12)
       colored (>= 1.2)
       grit

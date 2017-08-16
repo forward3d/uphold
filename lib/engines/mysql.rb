@@ -8,7 +8,7 @@ module Uphold
         @docker_tag ||= '5.7.10'
         @docker_env ||= ['MYSQL_ALLOW_EMPTY_PASSWORD=yes', "MYSQL_DATABASE=#{@database}"]
         @port ||= 3306
-        @sql_file ||= 'MySQL.sql'
+        @sql_file = params[:sql_file] || 'MySQL.sql'
       end
 
       def load_backup(path)

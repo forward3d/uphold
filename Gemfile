@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sequel',     '~> 4.30'
-gem 'docker-api', '~> 1.25'
+gem 'docker-api', '~> 1.33.2'
 
 group :tester do
   # core
@@ -10,7 +10,7 @@ group :tester do
 
   # engines
   gem 'pg',        '~> 0.18.4'
-  gem 'mysql2',    '~> 0.4.2'
+  gem 'mysql2',    '~> 0.4.6'
   gem 'mongoid',   '~> 5.0', '>= 5.0.2'
   gem 'rethinkdb', '~> 2.2', '>= 2.2.0.2'
   gem 'sqlite3',   '~> 1.3', '>= 1.3.11'
